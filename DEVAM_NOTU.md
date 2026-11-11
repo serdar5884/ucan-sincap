@@ -145,3 +145,8 @@ Sıra: Kapadokya(0) → İstanbul(1) → Sivas(2) → Bursa(3) → Konya(4) → 
 
 ## Oyunun adı "Uçan Sincap" (10 Kasım 2026)
 - Başlık ve menüden "Kapadokya" kaldırıldı; alt yazı "Balonla Türkiye'yi gez: 9 şehir, 36 bölüm". GitHub deposu adı: `ucan-sincap` (kullanıcı açacak; sonra push + GitHub Pages).
+
+## Taç Kapı (11 Kasım 2026)
+- Bölümün son kapısı (Büyük Kapı) geçilince +15 fındık ve pul verilir ama kutlama artık başlamaz. 250 px sonra büyük bir **Taç Kapı** gelir (`finGate`, `drawCrownGate`): mermer kemer, 2x büyüklükte altın taç amblemi, flamalar, açıklıkta parıldayan ışık perdesi. Çarpışma yok (sadece süs). Görününce "Taç Kapı! İçinden geç, kutlama başlasın!" yazısı çıkar.
+- Oyuncu Taç Kapı'dan geçince `startCeleb()` başlar (balonlar, konfeti, fanfar), 3.6 sn sonra `showWin()`. Büyük Kapı sonrası boşluk 320 px.
+- Not: testte `shieldT = 999` verilince kalkan süre çubuğu ekran boyu çizgi olarak görünür; bu sadece test kopyasının yan etkisi.
