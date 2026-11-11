@@ -150,3 +150,18 @@ Sıra: Kapadokya(0) → İstanbul(1) → Sivas(2) → Bursa(3) → Konya(4) → 
 - Bölümün son kapısı (Büyük Kapı) geçilince +15 fındık ve pul verilir ama kutlama artık başlamaz. 250 px sonra büyük bir **Taç Kapı** gelir (`finGate`, `drawCrownGate`): mermer kemer, 2x büyüklükte altın taç amblemi, flamalar, açıklıkta parıldayan ışık perdesi. Çarpışma yok (sadece süs). Görününce "Taç Kapı! İçinden geç, kutlama başlasın!" yazısı çıkar.
 - Oyuncu Taç Kapı'dan geçince `startCeleb()` başlar (balonlar, konfeti, fanfar), 3.6 sn sonra `showWin()`. Büyük Kapı sonrası boşluk 320 px.
 - Not: testte `shieldT = 999` verilince kalkan süre çubuğu ekran boyu çizgi olarak görünür; bu sadece test kopyasının yan etkisi.
+
+## Tarihi kapı + Ankara + iki yol farklı (11 Kasım 2026 gece)
+- Taç Kapı kaldırıldı → `drawGate(x)`: yere oturan, iki kuleli (mazgal + bayrak), çini ve yazı kuşaklı, kırmızı-beyaz ablak taşlı **sivri kemerli tarihi kapı**; kemer içinde mukarnas, kandiller, ışık. Kemerden geçince kutlama (`finGate`).
+- Ankara 1. yol arka planı: Anıtkabir ve Atakule kaldırıldı → Ankara Kalesi tepesi + **Hacı Bayram Veli Camii** (piramit çatı, tuğla minare) + Augustus Tapınağı duvarı + evler. 2. yol (`drawAnk2`): **TBMM binası** (sütunlu, kuleli, bayraklı) + **Ulus Meydanı Zafer Anıtı** + güvercinler.
+- **Her şehrin 2. yolu farklı** (`lvPart(level) === 2`): `drawRegion` 2. yolda `drawKap2…drawAnt2` çizer; `makeBottom` yol başına farklı yapı seti kullanır:
+  - Kapadokya 1: peri bacaları · 2: kaya kaleler; arka plan Uçhisar, güvercinlikler, Kızılırmak, Avanos çömlekleri.
+  - İstanbul 1: Galata, Kız Kulesi · 2: Saat Kulesi, **Dikilitaş** (`makeObelisk`); arka plan Sultanahmet & Ayasofya, Haliç, kırmızı tramvay.
+  - Sivas 1: Çifte Minareli, kümbet · 2: Gök Medrese, **Divriği taç kapısı** (`makeDivrigi`); arka plan Divriği, Eğri Köprü, koyunlar.
+  - Bursa 1: Yeşil Türbe + teleferik · 2: Tophane, Ulu Cami minaresi, üstte bulut; arka plan Cumalıkızık evleri, Irgandı Köprüsü.
+  - Konya 1: Mevlâna · 2: İnce Minareli, Alaaddin kümbeti; arka plan Alaaddin Tepesi, Çatalhöyük.
+  - Ankara 1: Ankara Kalesi, Hacı Bayram minaresi · 2: **TBMM** (`makeMeclis`), **Ulus Zafer Anıtı** (`makeUlus`), Atakule. (Anıtkabir sadece Büyük Kapı olarak kaldı.)
+  - Erzurum 1: Üç Kümbetler · 2: Yakutiye, **Erzurum Kalesi** (`makeAnKale(...,'erzkale')`); arka plan kale + Tepsi Minare + Çifte Minareli.
+  - Adıyaman 1: Nemrut başları · 2: Cendere, **Perre** (`makePerre`); arka plan Atatürk Barajı gölü, Cendere Köprüsü, kaya mezarları.
+  - Antalya 1: Yivli Minare, Hadrian · 2: **Aspendos** (`makeAspendos`), palmiye; arka plan Aspendos tiyatrosu, Konyaaltı plajı ve şemsiyeler.
+- Pasaporta yeni yapılar eklendi (`CITY_LM`, `LMK`, `LM_NAME`).

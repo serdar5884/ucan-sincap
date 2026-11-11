@@ -799,8 +799,8 @@ function makeAtakule(cx, y0, w) {
   bakeObs(o); return o;
 }
 /* --- Ankara Kalesi --- */
-function makeAnKale(cx, y0, w) {
-  const W2 = w / 2 + 3, o = { top: false, cx, y0, w: W2 * 2, style: 'ankale', lm: 'ankale', seed: randi(0, 999), wins: [], pal: { o: '#3a2a22', l: '#8a6a52', b: '#a88468', h: '#c8a688', s: '#7a5a44' }, noStrata: true };
+function makeAnKale(cx, y0, w, lm = 'ankale') {
+  const W2 = w / 2 + 3, o = { top: false, cx, y0, w: W2 * 2, style: 'ankale', lm, seed: randi(0, 999), wins: [], pal: { o: '#3a2a22', l: '#8a6a52', b: '#a88468', h: '#c8a688', s: '#7a5a44' }, noStrata: true };
   o.hw = y => { if (y < y0) return 0; const k = y - y0, toB = GROUND - y; if (k < 4) return W2 * .8; if (toB < 30) return W2 + (30 - toB) * .3; return W2 * .8; };
   o.palAt = y => GROUND - y < 30 ? ROCKP : o.pal; o.isCap = y => GROUND - y < 30;
   o.deco = (g, half, yA) => { const hw = Math.round(W2 * .8); g.fillStyle = 'rgba(0,0,0,0)'; g.clearRect(half - hw, 0, hw * 2, 0);
@@ -858,6 +858,64 @@ function makeCendere(cx, y0, w) {
     const r = Math.round(W2 * .6); g.fillStyle = '#4a3a2a'; g.fillRect(half - r, GROUND - 16 - yA, r * 2, 16); for (let k = 0; k <= r; k++) { const hw = Math.round(Math.sqrt(r * r - (r - k) * (r - k))); g.fillRect(half - hw, GROUND - 16 - r + k - yA, hw * 2, 1); } };
   bakeObs(o); return o;
 }
+/* --- İstanbul: Dikilitaş --- */
+function makeObelisk(cx, y0, w) {
+  const W2 = w / 2, o = { top: false, cx, y0, w, style: 'dikilitas', lm: 'dikilitas', seed: randi(0, 999), wins: [], noStrata: true, pal: { o: '#4a2a2a', l: '#a8706a', b: '#c8908a', h: '#e8b4a8', s: '#986058' } };
+  o.hw = y => { if (y < y0) return 0; const k = y - y0, toB = GROUND - y; if (k < 6) return 1 + k * (W2 * .4) / 6; if (toB < 26) return toB < 8 ? W2 * .95 : W2 * .8; return W2 * (.42 + .1 * Math.min(1, k / Math.max(1, GROUND - y0 - 26))); };
+  o.palAt = y => GROUND - y < 26 ? STONE : o.pal; o.isCap = y => GROUND - y < 26;
+  o.deco = (g, half, yA) => { g.fillStyle = '#6a3a34'; for (let yy = y0 + 10; yy < GROUND - 30; yy += 5) { g.fillRect(half - 2, yy - yA, 1, 2); g.fillRect(half + 1, yy + 2 - yA, 2, 1); g.fillRect(half - 1, yy + 3 - yA, 1, 1); }
+    g.fillStyle = '#9a8c78'; g.fillRect(half - Math.round(W2 * .8), GROUND - 18 - yA, Math.round(W2 * 1.6), 1); };
+  bakeObs(o); return o;
+}
+/* --- Sivas: Divriği Ulu Camii taç kapısı --- */
+function makeDivrigi(cx, y0, w) {
+  const W2 = w / 2 + 4, o = { top: false, cx, y0, w: W2 * 2, style: 'divrigi', lm: 'divrigi', seed: randi(0, 999), wins: [], noStrata: true, pal: STONE };
+  o.hw = y => { if (y < y0) return 0; const k = y - y0; if (k < 3) return W2 * .9; return W2 * .95; };
+  o.isCap = y => y - y0 < 3; o.palAt = () => STONE;
+  o.deco = (g, half, yA) => { const iw = Math.round(W2 * .55), top = y0 + 10 - yA;
+    g.fillStyle = '#7a6a58'; for (let yy = top; yy < GROUND - yA; yy += 3) { g.fillRect(half - Math.round(W2 * .85), yy, 1, 1); g.fillRect(half + Math.round(W2 * .85) - 1, yy + 1, 1, 1); }
+    g.fillStyle = '#3a2a1e'; g.fillRect(half - iw, top + iw, iw * 2, GROUND - yA - top - iw); for (let k = 0; k <= iw; k++) { const hw = Math.round(iw * Math.sqrt(1 - Math.pow(1 - k / iw, 2))); g.fillRect(half - hw, top + k, hw * 2, 1); }
+    g.fillStyle = '#c8b898'; for (let k = 2; k < iw * 2 - 1; k += 3) for (let r = 0; r < 3; r++) g.fillRect(half - iw + k, top + iw + 2 + r * 4, 1, 2);   // mukarnas
+    g.fillStyle = '#2ab0c0'; for (const dx of [-Math.round(W2 * .7), Math.round(W2 * .7) - 1]) { g.fillRect(half + dx - 1, top + 2, 3, 3); } };
+  bakeObs(o); return o;
+}
+/* --- Ankara: TBMM binası kulesi --- */
+function makeMeclis(cx, y0, w) {
+  const W2 = w / 2 + 4, o = { top: false, cx, y0, w: W2 * 2, style: 'meclis', lm: 'meclis', seed: randi(0, 999), wins: [], noStrata: true, pal: CREAM };
+  o.hw = y => { if (y < y0) return 0; const k = y - y0, toB = GROUND - y; if (k < 6) return 2 + k * (W2 * .4) / 6; if (k < 8) return W2 * .5; if (toB < 30) return toB < 10 ? W2 + (10 - toB) * .3 : W2 * .95; return W2 * .5; };
+  o.palAt = y => y - y0 < 6 ? LEAD : CREAM; o.isCap = y => y - y0 < 8 || GROUND - y < 30;
+  o.deco = (g, half, yA) => { g.fillStyle = '#9a8460'; for (let yy = y0 + 12; yy < GROUND - 34; yy += 8) for (const dx of [-3, 1]) g.fillRect(half + dx, yy - yA, 2, 5);
+    g.fillStyle = '#7a6a48'; const cw = Math.round(W2 * .95); for (let x = -cw + 2; x < cw - 1; x += 4) g.fillRect(half + x, GROUND - 28 - yA, 2, 18);
+    g.fillStyle = '#e30a17'; g.fillRect(half, 0, 1, 3); g.fillRect(half + 1, 0, 3, 2); };
+  bakeObs(o); return o;
+}
+/* --- Ankara: Ulus Zafer Anıtı (atlı heykel kaidesi) --- */
+function makeUlus(cx, y0, w) {
+  const W2 = w / 2 + 2, BR = { o: '#1e1a14', l: '#5a4a32', b: '#7a6440', h: '#a88a58', s: '#4a3a24' };
+  const o = { top: false, cx, y0, w: W2 * 2, style: 'ulus', lm: 'ulus', seed: randi(0, 999), wins: [], noStrata: true, pal: STONE };
+  const RID = [1, 1.5, 2, 2, 2.5, 3, 3, 6, 8, 9, 9, 9, 8, 7, 5];   // atlı silüeti genişlikleri
+  o.hw = y => { if (y < y0) return 0; const k = y - y0; if (k < RID.length) return RID[k]; if (GROUND - y < 12) return W2 * .95; return W2 * .62; };
+  o.palAt = y => y - y0 < RID.length ? BR : STONE; o.isCap = y => y - y0 < RID.length || GROUND - y < 12;
+  o.deco = (g, half, yA) => { g.fillStyle = '#d8cbb0'; for (let x = 0; x < 3; x++) g.fillRect(half - 9 + x, y0 + 11 - yA, 1, 4); g.fillStyle = '#3a2a1a'; g.fillRect(half - Math.round(W2 * .4), y0 + 30 - yA, Math.round(W2 * .8), 2); };
+  bakeObs(o); return o;
+}
+/* --- Adıyaman: Perre kaya mezarları --- */
+function makePerre(cx, y0, w) {
+  const W2 = w / 2 + 2, ph = rand(0, 6), o = { top: false, cx, y0, w: W2 * 2, style: 'perre', lm: 'perre', seed: randi(0, 999), wins: [], noStrata: true, pal: NEMR };
+  o.hw = y => { if (y < y0) return 0; const k = y - y0; return (k < 8 ? W2 * (.6 + .05 * k) : W2) * (1 - .06 * Math.abs(Math.sin(y * .2 + ph))); };
+  o.isCap = () => false; o.palAt = () => NEMR;
+  o.deco = (g, half, yA) => { g.fillStyle = '#3a1a0e'; for (let yy = y0 + 14; yy < GROUND - 10; yy += 16) for (const dx of [-Math.round(W2 * .45), Math.round(W2 * .2)]) { g.fillRect(half + dx, yy - yA, 5, 7); g.fillRect(half + dx + 1, yy - 1 - yA, 3, 1); } };
+  bakeObs(o); return o;
+}
+/* --- Antalya: Aspendos tiyatrosu sahne duvarı --- */
+function makeAspendos(cx, y0, w) {
+  const W2 = w / 2 + 6, o = { top: false, cx, y0, w: W2 * 2, style: 'aspendos', lm: 'aspendos', seed: randi(0, 999), wins: [], noStrata: true, pal: { o: '#5a3a22', l: '#c88a5a', b: '#e0a470', h: '#f4c898', s: '#b87a4a' } };
+  o.hw = y => { if (y < y0) return 0; const k = y - y0; if (k < 3) return W2 * .92; return W2; };
+  o.isCap = () => false;
+  o.deco = (g, half, yA) => { g.fillStyle = '#5a3418'; for (let row = 0, yy = y0 + 8; yy < GROUND - 8; yy += 16, row++) for (let x = -W2 + 3 + (row % 2) * 4; x < W2 - 5; x += 8) { g.fillRect(half + x, yy + 3 - yA, 4, 8); g.fillRect(half + x + 1, yy + 2 - yA, 2, 1); }
+    g.fillStyle = '#f4c898'; for (let yy = y0 + 6; yy < GROUND; yy += 16) g.fillRect(half - W2 + 1, yy - yA, W2 * 2 - 2, 1); };
+  bakeObs(o); return o;
+}
 /* Bursa teleferik kabini (üstten sarkar, hafifçe sallanır) */
 function makeCabin(cx, y1, w, mv) {
   const W2 = Math.min(w / 2, 15), o = { top: true, cx, y1, w: W2 * 2 + 2, style: 'teleferik', lm: 'teleferik', seed: randi(0, 999), wins: [], noStrata: true, ext: true };
@@ -884,15 +942,16 @@ function makeBoss(cx, y0, w, reg) {
   forceStyle = null; o.boss = true; return o;
 }
 function makeBottom(cx, y0, w, reg, mv) {
-  if (reg === 1) return makeIstTower(cx, y0, w);
-  if (reg === 2) return Math.random() < .62 ? makeMinaret(cx, y0, w, pick(['cifte', 'gok'])) : makeKumbet(cx, y0, w);
-  if (reg === 3) return Math.random() < .6 ? makeYesil(cx, y0, w) : makeTophane(cx, y0, w);
-  if (reg === 4) return Math.random() < .6 ? makeMevlana(cx, y0, w) : makeMinaret(cx, y0, w, 'ince');
-  if (reg === 5) { const r = Math.random(); return r < .4 ? makeAnit(cx, y0, w) : r < .7 ? makeAtakule(cx, y0, w) : makeAnKale(cx, y0, w); }
-  if (reg === 6) return Math.random() < .55 ? makeKumbet(cx, y0, w, 'uckumbet') : makeMinaret(cx, y0, w, 'yakutiye');
-  if (reg === 7) return Math.random() < .6 ? makeNemrut(cx, y0, w) : makeCendere(cx, y0, w);
-  if (reg === 8) { const r = Math.random(); return r < .35 ? makeMinaret(cx, y0, w, 'yivli') : r < .65 ? makeHadrian(cx, y0, w) : makePalm(cx, y0, w); }
-  const style = forceStyle || pick(['hat', 'hat', 'point', 'castle']);
+  const p2 = lvPart(level) === 2, r = Math.random();
+  if (reg === 1) { if (p2) return r < .55 ? (forceStyle = 'saat', (() => { const o = makeIstTower(cx, y0, w); forceStyle = null; return o; })()) : makeObelisk(cx, y0, w); forceStyle = pick(['galata', 'kiz']); const o = makeIstTower(cx, y0, w); forceStyle = null; return o; }
+  if (reg === 2) return p2 ? (r < .5 ? makeMinaret(cx, y0, w, 'gok') : makeDivrigi(cx, y0, w)) : (r < .55 ? makeMinaret(cx, y0, w, 'cifte') : makeKumbet(cx, y0, w));
+  if (reg === 3) return p2 ? (r < .5 ? makeTophane(cx, y0, w) : makeMinaret(cx, y0, w, 'ulucami')) : makeYesil(cx, y0, w);
+  if (reg === 4) return p2 ? (r < .5 ? makeMinaret(cx, y0, w, 'ince') : makeKumbet(cx, y0, w, 'alaaddin')) : makeMevlana(cx, y0, w);
+  if (reg === 5) return p2 ? (r < .4 ? makeMeclis(cx, y0, w) : r < .75 ? makeUlus(cx, y0, w) : makeAtakule(cx, y0, w)) : (r < .5 ? makeAnKale(cx, y0, w) : makeMinaret(cx, y0, w, 'hacibayram'));
+  if (reg === 6) return p2 ? (r < .5 ? makeMinaret(cx, y0, w, 'yakutiye') : makeAnKale(cx, y0, w, 'erzkale')) : makeKumbet(cx, y0, w, 'uckumbet');
+  if (reg === 7) return p2 ? (r < .5 ? makeCendere(cx, y0, w) : makePerre(cx, y0, w)) : makeNemrut(cx, y0, w);
+  if (reg === 8) return p2 ? (r < .5 ? makeAspendos(cx, y0, w) : makePalm(cx, y0, w)) : (r < .5 ? makeMinaret(cx, y0, w, 'yivli') : makeHadrian(cx, y0, w));
+  const style = forceStyle || (p2 ? pick(['castle', 'point', 'castle']) : pick(['hat', 'hat', 'point']));
   if (style === 'castle') w += 6;
   const W2 = w / 2, len = GROUND - y0;
   const o = { top: false, cx, y0, w, style, lm: style === 'castle' ? 'kale' : 'peri', seed: randi(0, 999), wins: [] };
@@ -917,7 +976,7 @@ function makeBottom(cx, y0, w, reg, mv) {
 function makeTop(cx, y1, w, reg, mv) {
   if (reg === 1) return makeIstCloud(cx, y1, w);
   if (reg === 2) return makeIstCloud(cx, y1, w, SNOWC);
-  if (reg === 3) return makeCabin(cx, y1, w, mv);
+  if (reg === 3) return lvPart(level) === 2 ? makeIstCloud(cx, y1, w) : makeCabin(cx, y1, w, mv);
   if (reg === 4) return makeIstCloud(cx, y1, w, DUSTC);
   if (reg === 5) return makeIstCloud(cx, y1, w);
   if (reg === 6) return makeIcicle(cx, y1, w);
@@ -1121,11 +1180,14 @@ const LMK = {
   anit: 'Anıtkabir · Atatürk\'ün anıt mezarı, 1953', atakule: 'Atakule · 125 metre, 1989', ankale: 'Ankara Kalesi · şehre tepeden bakar',
   uckumbet: 'Üç Kümbetler · Erzurum', yakutiye: 'Yakutiye Medresesi · 1310',
   nemrut: 'Nemrut Dağı · dev taş başlar, UNESCO', cendere: 'Cendere Köprüsü · Roma döneminden',
-  yivli: 'Yivli Minare · Antalya\'nın simgesi', hadrian: 'Hadrian Kapısı · MS 130'
+  yivli: 'Yivli Minare · Antalya\'nın simgesi', hadrian: 'Hadrian Kapısı · MS 130',
+  dikilitas: 'Dikilitaş · 3500 yıllık, Mısır\'dan getirildi', divrigi: 'Divriği Ulu Camii · 1228, UNESCO', hacibayram: 'Hacı Bayram Veli Camii · 15. yüzyıl',
+  meclis: 'Türkiye Büyük Millet Meclisi binası', ulus: 'Ulus Meydanı · Zafer Anıtı, 1927', erzkale: 'Erzurum Kalesi · tarihi surlar',
+  perre: 'Perre Antik Kenti · kaya mezarları', aspendos: 'Aspendos Tiyatrosu · Roma dönemi', alaaddin: 'Alaaddin Tepesi · Selçuklu eserleri', ulucami: 'Bursa Ulu Cami · 20 kubbeli'
 };
-const CITY_LM = [['peri', 'kale'], ['galata', 'kiz', 'saat'], ['cifte', 'gok', 'kumbet'], ['yesil', 'tophane', 'teleferik'], ['mevlana', 'ince'], ['anit', 'atakule', 'ankale'], ['uckumbet', 'yakutiye'], ['nemrut', 'cendere'], ['yivli', 'hadrian']];
+const CITY_LM = [['peri', 'kale'], ['galata', 'kiz', 'saat', 'dikilitas'], ['cifte', 'kumbet', 'gok', 'divrigi'], ['yesil', 'teleferik', 'tophane', 'ulucami'], ['mevlana', 'ince', 'alaaddin'], ['ankale', 'hacibayram', 'meclis', 'ulus', 'atakule'], ['uckumbet', 'yakutiye', 'erzkale'], ['nemrut', 'cendere', 'perre'], ['yivli', 'hadrian', 'aspendos']];
 const CITY_NAME = ['Kapadokya', 'İstanbul', 'Sivas', 'Bursa', 'Konya', 'Ankara', 'Erzurum', 'Adıyaman', 'Antalya'], CITY_FROM = ["Kapadokya'dan", "İstanbul'dan", "Sivas'tan", "Bursa'dan", "Konya'dan", "Ankara'dan", "Erzurum'dan", "Adıyaman'dan", "Antalya'dan"];
-const LM_NAME = { peri: 'Peri Bacası', kale: 'Kaya Kale', galata: 'Galata Kulesi', kiz: 'Kız Kulesi', saat: 'Dolmabahçe Saat Kulesi', cifte: 'Çifte Minareli Medrese', gok: 'Gök Medrese', kumbet: 'Selçuklu Kümbeti', yesil: 'Yeşil Türbe', tophane: 'Tophane Saat Kulesi', teleferik: 'Uludağ Teleferiği', mevlana: 'Mevlâna Türbesi', ince: 'İnce Minareli Medrese', anit: 'Anıtkabir', atakule: 'Atakule', ankale: 'Ankara Kalesi', uckumbet: 'Üç Kümbetler', yakutiye: 'Yakutiye Medresesi', nemrut: 'Nemrut Dağı', cendere: 'Cendere Köprüsü', yivli: 'Yivli Minare', hadrian: 'Hadrian Kapısı' };
+const LM_NAME = { peri: 'Peri Bacası', kale: 'Kaya Kale', galata: 'Galata Kulesi', kiz: 'Kız Kulesi', saat: 'Dolmabahçe Saat Kulesi', cifte: 'Çifte Minareli Medrese', gok: 'Gök Medrese', kumbet: 'Selçuklu Kümbeti', yesil: 'Yeşil Türbe', tophane: 'Tophane Saat Kulesi', teleferik: 'Uludağ Teleferiği', mevlana: 'Mevlâna Türbesi', ince: 'İnce Minareli Medrese', anit: 'Anıtkabir', atakule: 'Atakule', ankale: 'Ankara Kalesi', uckumbet: 'Üç Kümbetler', yakutiye: 'Yakutiye Medresesi', nemrut: 'Nemrut Dağı', cendere: 'Cendere Köprüsü', yivli: 'Yivli Minare', hadrian: 'Hadrian Kapısı', dikilitas: 'Dikilitaş', divrigi: 'Divriği Ulu Camii', hacibayram: 'Hacı Bayram Veli Camii', meclis: 'TBMM Binası', ulus: 'Ulus Meydanı', erzkale: 'Erzurum Kalesi', perre: 'Perre Antik Kenti', aspendos: 'Aspendos Tiyatrosu', alaaddin: 'Alaaddin Tepesi', ulucami: 'Bursa Ulu Cami' };
 const START_COST = [0, 15, 30, 45, 60, 75, 90, 105, 120];
 const CARDS = [
   [['k1', 'Peri Bacaları', 'Volkanik tüfün rüzgâr ve yağmurla aşınmasıyla oluştu.'], ['k2', 'Göreme Açık Hava Müzesi', 'Kayaya oyulmuş kiliseleri var, UNESCO Dünya Mirası.'], ['k3', 'Derinkuyu Yeraltı Şehri', 'Yerin altında kat kat inen dev bir şehir.'], ['k4', 'Uçhisar Kalesi', 'Kayaya oyulmuş, bölgenin en yüksek yerlerinden.'], ['k5', 'Sıcak Hava Balonları', 'Gün doğarken yüzlerce balon birlikte havalanır.'], ['k6', 'Avanos Çömlekçiliği', 'Kızılırmak\'ın kiliyle çömlekler yapılır.']],
@@ -1224,31 +1286,36 @@ function comboUp() { combo++; mEvent('combo', combo);
   if (combo % 5 === 0) { const k = Math.min(PRAISE.length - 1, combo / 5 - 1); praise(PRAISE[k] + ' x' + combo); nuts += 2; setNuts(); [660, 880, 1100, 1320].forEach((f, i) => tone(f, .08, 'square', .05, null, i * .05)); try { navigator.vibrate && navigator.vibrate(15); } catch (e) {} } }
 function praiseGate() { if (perk === 'altin' && score > 0 && score % 10 === 0) { nuts += 5; setNuts(); texts.push({ x: PX - 6, y: py - 30, life: 1, s: '+5', c: '#ffd23f' }); }
   if (score > 0 && score % 10 === 0) praise(pick(['Ooo', 'Harika!', 'Çok iyi!', 'Yaşa!']) + ' ' + score, '#ffffff'); }
-const CG_TOP = 86, CG_BOT = GROUND - 44;   // Taç Kapı açıklığı
-function drawCrownGate(x) {
-  const g = wctx, hw = 30, gold = '#ffcf3a', goldD = '#b8860b', mar = '#f4efe4', marS = '#d8cfbe', ink = '#3a2a1a';
-  // üst kemer
-  g.fillStyle = ink; g.fillRect(x - hw - 1, 0, hw * 2 + 2, CG_TOP + 1);
-  g.fillStyle = mar; g.fillRect(x - hw, 0, hw * 2, CG_TOP);
-  for (let dx = -hw + 3; dx < hw - 2; dx++) { const u = dx / (hw - 3), d = Math.round(Math.sqrt(Math.max(0, 1 - u * u)) * 14); g.fillStyle = marS; g.fillRect(x + dx, CG_TOP - d, 1, d); }   // kemer içi gölge
-  g.fillStyle = gold; g.fillRect(x - hw, CG_TOP - 3, hw * 2, 2); g.fillRect(x - hw, 4, hw * 2, 2);
-  for (const dx of [-hw + 2, hw - 4]) { g.fillStyle = marS; g.fillRect(x + dx, 6, 2, CG_TOP - 9); }
-  // taç amblemi
-  { const cy = 54, t = time, S = 2, R = (dx, dy, w, h, c) => { g.fillStyle = c; g.fillRect(x + dx * S, cy + dy * S, w * S, h * S); };   // büyük taç (2x)
-    R(-10, 2, 21, 7, goldD); R(-9, 2, 19, 6, gold); R(-9, 7, 19, 1, goldD);
-    for (const [dx, h] of [[-9, 8], [-4, 6], [0, 11], [4, 6], [9, 8]]) { R(dx - 1, 2 - h, 3, h, goldD); R(dx, 2 - h, 1, h, gold); R(dx - 1, 1 - h, 3, 2, '#e8413f'); }
-    for (const [dx, c] of [[-6, '#e8413f'], [0, '#2f9ae0'], [6, '#4cc04a']]) R(dx - 1, 4, 3, 2, c);
-    g.fillStyle = '#fff6b0'; g.fillRect(x - 17, cy + 5, 2, 2);
-    if (Math.sin(t * 5) > .2) { g.fillStyle = '#ffffff'; const sx = x + Math.round(Math.sin(t * 1.7) * 14), sy = cy - 6; g.fillRect(sx, sy - 2, 1, 5); g.fillRect(sx - 2, sy, 5, 1); } }
-  // alt kaide (basamaklı)
-  g.fillStyle = ink; g.fillRect(x - hw - 1, CG_BOT - 1, hw * 2 + 2, GROUND - CG_BOT + 1);
-  g.fillStyle = mar; g.fillRect(x - hw, CG_BOT, hw * 2, GROUND - CG_BOT);
-  g.fillStyle = gold; g.fillRect(x - hw, CG_BOT + 1, hw * 2, 2);
-  g.fillStyle = marS; for (let yy = CG_BOT + 8; yy < GROUND; yy += 6) g.fillRect(x - hw - 2 + ((yy / 6) | 0) % 2, yy, hw * 2 + 4, 1);
-  // açıklıkta parıltılı ışık perdesi ve flamalar
-  const a = .18 + .12 * Math.sin(time * 4); g.fillStyle = `rgba(255,230,140,${a})`; g.fillRect(x - 8, CG_TOP, 16, CG_BOT - CG_TOP);
-  for (let yy = CG_TOP + 4; yy < CG_BOT; yy += 7) { const c = ['#e8413f', '#ffd23f', '#2f9ae0', '#4cc04a', '#ff6aa8'][((yy / 7) | 0) % 5]; g.fillStyle = c; g.fillRect(x - 1 + (Math.floor(time * 6 + yy) % 2), yy + ((time * 20) % 7 | 0), 2, 2); }
-  for (let k = 0; k < 6; k++) { const fx = x - hw + 3 + k * 10, wv = Math.round(Math.sin(time * 6 + k) * 1.5); g.fillStyle = ['#e8413f', '#ffd23f', '#2f9ae0', '#4cc04a', '#ff6aa8', '#ffffff'][k]; for (let r = 0; r < 4; r++) g.fillRect(fx, CG_TOP + r + 1, 4 - r, 1); g.fillRect(fx + wv, CG_TOP + 1, 1, 1); }
+/* Bölüm sonu: kuleli, sivri kemerli tarihi kale kapısı (yere oturur, kemerin içinden geçilir) */
+function drawGate(x) {
+  const g = wctx, ink = '#2a1e16', st = '#d8c4a0', stS = '#b8a07a', stH = '#efe0c0', red = '#a8402e', tq = '#2ab0c0', gold = '#ffcf3a';
+  const top = 44, wHalf = 48, tw = 13, ah = 27, aTop = 100, B = GROUND;
+  const blocks = (x0, y0, w, h) => { g.fillStyle = st; g.fillRect(x0, y0, w, h); g.fillStyle = stS; for (let yy = y0 + 5; yy < y0 + h; yy += 6) { g.fillRect(x0, yy, w, 1); for (let xx = x0 + (((yy / 6) | 0) % 2) * 4; xx < x0 + w; xx += 8) g.fillRect(xx, yy - 5, 1, 5); } g.fillStyle = stH; g.fillRect(x0, y0, 1, h); };
+  // yan kuleler
+  for (const sgn of [-1, 1]) { const tx = x + sgn * (wHalf - tw / 2) - (tw >> 1);
+    g.fillStyle = ink; g.fillRect(tx - 1, top - 9, tw + 2, B - top + 9); blocks(tx, top - 8, tw, B - top + 8);
+    g.fillStyle = ink; for (let k = 0; k < 3; k++) g.fillRect(tx + k * 4, top - 13, 3, 5); g.fillStyle = st; for (let k = 0; k < 3; k++) g.fillRect(tx + k * 4, top - 12, 3, 4);
+    g.fillStyle = '#1a1410'; for (let yy = top + 6; yy < B - 20; yy += 40) { g.fillRect(tx + 5, yy, 3, 7); g.fillRect(tx + 6, yy - 1, 1, 1); }
+    const fx = tx + 5, wv = Math.round(Math.sin(time * 5 + sgn) * 1.5); g.fillStyle = '#5a4a3a'; g.fillRect(fx, top - 26, 1, 14);
+    g.fillStyle = '#e30a17'; for (let r = 0; r < 6; r++) g.fillRect(fx + 1, top - 26 + r, 9 - Math.abs(r - 2.5) + (r === 3 ? wv : 0), 1); }
+  // orta duvar ve mazgallar
+  const wx0 = x - wHalf + tw, ww = (wHalf - tw) * 2;
+  g.fillStyle = ink; g.fillRect(wx0, top - 1, ww, B - top + 1); blocks(wx0, top, ww, B - top);
+  for (let k = 0; k < ww; k += 5) { g.fillStyle = ink; g.fillRect(wx0 + k, top - 5, 3, 4); g.fillStyle = st; g.fillRect(wx0 + k, top - 4, 3, 3); }
+  // çini ve yazı kuşağı
+  g.fillStyle = tq; g.fillRect(wx0, top + 8, ww, 3); g.fillStyle = '#ffffff'; for (let k = 1; k < ww; k += 4) g.fillRect(wx0 + k, top + 9, 1, 1);
+  g.fillStyle = '#1e4a6a'; g.fillRect(wx0 + 2, top + 14, ww - 4, 8); g.fillStyle = gold; for (let k = 4; k < ww - 4; k += 3) g.fillRect(wx0 + k, top + 16 + (k % 2) * 2, 2, 1);
+  // sivri kemer (ablak taşlı) ve karanlık geçit
+  const arch = (hw, y) => { const t = (y - aTop) / 32; return t >= 1 ? hw : Math.round(hw * Math.sqrt(Math.max(0, 1 - (1 - t) * (1 - t))) * (1 - .25 * (1 - t))); };
+  for (let y = aTop - 6; y < B; y++) { const ow = arch(ah + 5, y + 6 - 0); if (ow <= 0) continue; for (let dx = -ow; dx <= ow; dx++) { const inner = arch(ah, y); if (Math.abs(dx) <= inner) continue; g.fillStyle = (((Math.atan2(y - aTop - 32, dx) * 7) | 0) + (y > aTop + 32 ? ((y / 5) | 0) : 0)) % 2 ? red : '#f4ead8'; g.fillRect(x + dx, y, 1, 1); } }
+  for (let y = aTop; y < B; y++) { const hw = arch(ah, y); if (hw <= 0) continue; g.fillStyle = 'rgba(30,20,16,.62)'; g.fillRect(x - hw, y, hw * 2 + 1, 1); }
+  // mukarnas ve kilit taşı, yan rozetler
+  g.fillStyle = '#c8b088'; for (let k = 0; k < 5; k++) for (let dx = -14 + k * 3; dx <= 14 - k * 3; dx += 4) g.fillRect(x + dx, aTop + 5 + k * 4, 2, 3);
+  g.fillStyle = gold; g.fillRect(x - 2, aTop - 8, 5, 4); g.fillStyle = red; g.fillRect(x - 1, aTop - 7, 3, 2);
+  for (const dx of [-ah - 10, ah + 7]) { g.fillStyle = tq; g.fillRect(x + dx, aTop + 2, 4, 4); g.fillStyle = gold; g.fillRect(x + dx + 1, aTop + 3, 2, 2); }
+  // kandiller ve ışık
+  for (const dx of [-12, 12]) { const fl = Math.sin(time * 9 + dx) > 0 ? '#ffd23f' : '#ff9a2a'; g.fillStyle = '#3a2a1a'; g.fillRect(x + dx, aTop + 18, 1, 6); g.fillStyle = fl; g.fillRect(x + dx - 1, aTop + 24, 3, 3); }
+  g.fillStyle = `rgba(255,220,130,${.12 + .1 * Math.sin(time * 4)})`; for (let y = aTop + 6; y < B; y++) { const hw = arch(ah, y) - 2; if (hw > 0) g.fillRect(x - hw, y, hw * 2 + 1, 1); }
 }
 function startCeleb(nextReg) {
   celebT = 3.2; celebPop = 0;
@@ -1585,8 +1652,8 @@ function update(dt) {
     for (const o of obs) if (o.mv) o.dy = Math.sin(time * o.mv.sp + o.mv.ph) * o.mv.amp;
     for (const it of items) if (it.mv) { const nd = Math.sin(time * it.mv.sp + it.mv.ph) * it.mv.amp; it.y += nd - (it.mdy || 0); it.mdy = nd; }
     if (finGate) { finGate.x -= spd * dt;
-      if (!finGate.warned && finGate.x < W + 10) { finGate.warned = true; showBanner('Taç Kapı!', 'İçinden geç, kutlama başlasın!', 1); }
-      if (!finGate.passed && finGate.x < PX) { finGate.passed = true; shake = .3; startCeleb(); winPending = 3.6; for (let i = 0; i < 40; i++) parts.push({ x: finGate.x, y: rand(70, GROUND - 40), vx: rand(-40, 80), vy: rand(-60, 30), life: 1.2, max: 1.2, c: pick(['#ffd23f', '#fff6b0', '#ffffff', '#e8413f']), g: .3, s: 2 }); }
+      if (!finGate.warned && finGate.x < W + 10) { finGate.warned = true; showBanner('Tarihi Kapı!', 'Kemerin içinden geç, kutlama başlasın!', 1); }
+      if (!finGate.passed && finGate.x < PX) { finGate.passed = true; shake = .3; startCeleb(); winPending = 3.6; for (let i = 0; i < 40; i++) parts.push({ x: finGate.x, y: rand(120, GROUND - 10), vx: rand(-40, 80), vy: rand(-60, 30), life: 1.2, max: 1.2, c: pick(['#ffd23f', '#fff6b0', '#ffffff', '#e8413f']), g: .3, s: 2 }); }
       if (finGate.x < -60) finGate = null; }
     updCeleb(dt);
     if (winPending > 0) { winPending -= dt; if (winPending <= 0) return showWin(); }
@@ -1810,7 +1877,99 @@ function drawKap(P, a) {
   for (let x = 0; x < W; x++) { const h = nearH[(((x + bg * .55) | 0) % NEAR_L + NEAR_L) % NEAR_L]; ctx.fillRect(x, GROUND - h, 1, h); }
   ctx.globalAlpha = 1;
 }
-function drawRegion(r, P, a) { if (a <= .001) return; [drawKap, drawIstanbul, drawSivas, drawBursa, drawKonya, drawAnkara, drawErzurum, drawAdiyaman, drawAntalya][r](P, a); ctx.globalAlpha = 1; }
+function drawRegion(r, P, a) { if (a <= .001) return; const p2 = lvPart(level) === 2 && state !== 'menu' && state !== 'garage';
+  (p2 ? [drawKap2, drawIst2, drawSiv2, drawBur2, drawKon2, drawAnk2, drawErz2, drawAdi2, drawAnt2] : [drawKap, drawIstanbul, drawSivas, drawBursa, drawKonya, drawAnkara, drawErzurum, drawAdiyaman, drawAntalya])[r](P, a); ctx.globalAlpha = 1; }
+/* ===== 2. yol arka planları: her şehrin başka yerleri ===== */
+const river = (P, top, h, col) => { for (let y = top; y < top + h; y++) { ctx.fillStyle = css(mix(hx(col), P.mid, .35 + (y - top) / h * .2)); ctx.fillRect(0, y, W, 1); } ctx.fillStyle = 'rgba(255,255,255,.35)'; for (let y = top + 1; y < top + h; y += 2) for (let x = -((bg * .5 + y * 9) % 12); x < W; x += 12) ctx.fillRect(Math.round(x), y, 3, 1); };
+function drawKap2(P, a) {   // Uçhisar Kalesi, güvercinlikler, Kızılırmak, Avanos çömlekleri
+  ctx.globalAlpha = a; ridge(.06, .7, 8, GROUND - 26, tn('#c89a7a', P, .45));
+  { const x = wrapX(130, .2, 420), by = GROUND - 22; ctx.fillStyle = tn('#d8a878', P, .4, 'mid2');
+    for (let dx = -44; dx <= 44; dx++) { const h = Math.round(78 * Math.pow(1 - Math.abs(dx) / 44, .7) + 3 * Math.sin(dx * .5)); ctx.fillRect(x + dx, by - h, 1, h); }
+    ctx.fillStyle = tn('#4a3020', P, .3, 'mid2'); for (let yy = by - 66; yy < by - 6; yy += 8) for (let dx = -30; dx < 30; dx += 7) { const lim = 44 * (1 - Math.pow((by - yy) / 81, 1 / .7)); if (Math.abs(dx) < lim - 4 && hash(dx, yy, 5) % 3) ctx.fillRect(x + dx, yy, 2, 3); } }
+  for (let i = 0; i < 4; i++) { const x = wrapX(30 + i * 95, .35, 380), by = GROUND - 18; if (x < -20 || x > W + 20) continue; ctx.fillStyle = tn('#c89070', P, .35, 'mid2'); ctx.fillRect(x - 6, by - 26, 12, 26); ctx.fillStyle = tn('#6a4030', P, .3, 'mid2'); for (let k = 0; k < 3; k++) ctx.fillRect(x - 4 + k * 3, by - 20 + (k % 2) * 6, 1, 2); ctx.fillRect(x - 7, by - 27, 14, 2); }
+  river(P, GROUND - 14, 8, '#c86a4a');
+  { const x = wrapX(240, .5, 360), by = GROUND - 14; ctx.fillStyle = tn('#a87858', P, .3, 'near'); ctx.fillRect(x - 24, by - 6, 48, 3); for (let dx = -16; dx <= 16; dx += 16) for (let k = 0; k < 5; k++) ctx.fillRect(x + dx - 5 + k, by - 3 + Math.round(Math.abs(k - 2) * .5), 1, 1); }
+  for (let i = 0; i < 6; i++) { const x = wrapX(i * 63 + 20, .55, 378), y = GROUND - 7; if (x < -6 || x > W + 6) continue; ctx.fillStyle = tn(i % 2 ? '#b8603a' : '#d0804a', P, .25, 'near'); ctx.fillRect(x - 2, y - 6, 5, 6); ctx.fillRect(x - 1, y - 8, 3, 2); ctx.fillRect(x - 3, y - 4, 7, 2); }
+}
+function drawIst2(P, a) {   // Sultanahmet & Ayasofya, Dikilitaş, Haliç, kırmızı tramvay
+  ctx.globalAlpha = a; ridge(.06, .35, 5, GROUND - 26, tn('#8a9ab8', P, .45));
+  const sil = tn('#7a7090', P, .35, 'mid2'), sd = tn('#4a4462', P, .35, 'mid2');
+  for (let k = 0; k < 2; k++) { const x = wrapX(90 + k * 190, .28, 380), by = GROUND - 22; if (x < -70 || x > W + 70) continue; ctx.fillStyle = sil;
+    const nm = k ? 4 : 6; ctx.fillRect(x - 30, by - 14, 60, 14); dome(x, by - 14, 15); dome(x - 20, by - 14, 7); dome(x + 20, by - 14, 7); ctx.fillRect(x, by - 33, 1, 4);
+    const ms = nm === 6 ? [-40, -34, -26, 25, 33, 39] : [-36, -28, 27, 35]; for (const dx of ms) { ctx.fillRect(x + dx, by - 52, 3, 52); ctx.fillRect(x + dx - 1, by - 38, 5, 1); ctx.fillRect(x + dx - 1, by - 46, 5, 1); ctx.fillRect(x + dx + 1, by - 58, 1, 6); }
+    ctx.fillStyle = k ? tn('#b86a5a', P, .4, 'mid2') : sd; ctx.fillRect(x - 28, by - 10, 56, 2); litWin(P, x - 10, by - 8, 2, 3); litWin(P, x + 8, by - 8, 2, 3); }
+  { const x = wrapX(200, .4, 300), by = GROUND - 14; ctx.fillStyle = tn('#a8706a', P, .3, 'near'); ctx.fillRect(x - 2, by - 36, 4, 36); ctx.fillRect(x - 1, by - 39, 2, 3); ctx.fillRect(x - 5, by - 4, 10, 4); }
+  river(P, GROUND - 16, 6, '#3a80b8');
+  ctx.fillStyle = tn('#6a6a72', P, .3, 'near'); ctx.fillRect(0, GROUND - 8, W, 1); ctx.fillRect(0, GROUND - 6, W, 1);
+  { const L = W + 120, tx = Math.round(((W + 50 - time * 22) % L + L) % L - 60), ty = GROUND - 17; ctx.fillStyle = '#c8202a'; ctx.fillRect(tx, ty, 34, 9); ctx.fillStyle = '#ffffff'; ctx.fillRect(tx, ty + 6, 34, 1); ctx.fillStyle = '#bfe8ff'; for (let k = 0; k < 6; k++) ctx.fillRect(tx + 2 + k * 5, ty + 2, 3, 3); ctx.fillStyle = '#2a2a30'; ctx.fillRect(tx + 4, ty + 9, 3, 2); ctx.fillRect(tx + 26, ty + 9, 3, 2); ctx.fillRect(tx + 16, ty - 3, 1, 3); }
+}
+function drawSiv2(P, a) {   // Divriği taç kapısı, Eğri Köprü, koyun sürüsü
+  ctx.globalAlpha = a; ridge(.07, 1, 12, GROUND - 24, tn('#8a9ab8', P, .45), tn('#ffffff', P, .25), 30);
+  { const x = wrapX(110, .25, 400), by = GROUND - 20; ctx.fillStyle = tn('#a89078', P, .4, 'mid2'); ctx.fillRect(x - 22, by - 44, 44, 44); ctx.fillRect(x - 26, by - 12, 52, 12);
+    ctx.fillStyle = tn('#4a3a2e', P, .35, 'mid2'); ctx.fillRect(x - 9, by - 26, 18, 26); for (let k = 0; k <= 9; k++) { const hw = Math.round(Math.sqrt(81 - (9 - k) * (9 - k))); ctx.fillRect(x - hw, by - 35 + k, hw * 2, 1); }
+    ctx.fillStyle = tn('#d8c8a8', P, .35, 'mid2'); for (let yy = by - 42; yy < by; yy += 3) { ctx.fillRect(x - 20, yy, 2, 1); ctx.fillRect(x + 18, yy + 1, 2, 1); } for (let dx = -7; dx < 8; dx += 3) ctx.fillRect(x + dx, by - 24, 1, 2); }
+  river(P, GROUND - 14, 7, '#5a8ab8');
+  { const x = wrapX(260, .45, 360), by = GROUND - 12; ctx.fillStyle = tn('#a89078', P, .3, 'near'); for (let dx = -40; dx <= 40; dx++) { const h = Math.round(16 - Math.abs(dx) * .18); ctx.fillRect(x + dx, by - h, 1, 3); }
+    ctx.fillRect(x - 30, by - 10, 4, 10); ctx.fillRect(x - 2, by - 14, 4, 14); ctx.fillRect(x + 26, by - 10, 4, 10); }
+  for (let i = 0; i < 7; i++) { const x = Math.round(((i * 23 + 60 - bg * .55 - time * 4) % (W + 60) + W + 60) % (W + 60) - 30), y = GROUND - 6 - (i % 2); ctx.fillStyle = '#f4f0e8'; ctx.fillRect(x, y - 3, 5, 3); ctx.fillStyle = '#2a2420'; ctx.fillRect(x + 5, y - 3, 2, 2); ctx.fillRect(x + 1, y, 1, 1); ctx.fillRect(x + 4, y, 1, 1); }
+}
+function drawBur2(P, a) {   // Cumalıkızık evleri, Irgandı Köprüsü, Uludağ uzakta
+  ctx.globalAlpha = a; ridge(.05, 1.1, 10, GROUND - 26, tn('#6a86a8', P, .45), tn('#ffffff', P, .25), 34);
+  const cols = ['#e8c050', '#b86ad0', '#e86a4a', '#6ab0e0', '#f0f0e0', '#7ac06a'];
+  for (let i = 0; i < 9; i++) { const x = wrapX(i * 42, .3, 378), by = GROUND - 16, hh = 22 + (i * 7) % 10; if (x < -30 || x > W + 30) continue;
+    ctx.fillStyle = tn('#8a7a6a', P, .35, 'mid2'); ctx.fillRect(x, by - 8, 26, 8); ctx.fillStyle = tn(cols[i % cols.length], P, .35, 'mid2'); ctx.fillRect(x - 2, by - hh, 30, hh - 8);   // cumbalı üst kat
+    ctx.fillStyle = tn('#5a3a2a', P, .35, 'mid2'); for (let k = 0; k < 3; k++) ctx.fillRect(x + 2 + k * 9, by - hh + 4, 4, 6); ctx.fillStyle = tn('#b8503a', P, .35, 'mid2'); for (let r = 0; r < 4; r++) ctx.fillRect(x - 3 + r, by - hh - 1 - r, 32 - r * 2, 1); litWin(P, x + 3, by - hh + 5, 2, 3); }
+  river(P, GROUND - 14, 6, '#4a8ab0');
+  { const x = wrapX(200, .5, 340), by = GROUND - 12; ctx.fillStyle = tn('#a89078', P, .3, 'near'); ctx.fillRect(x - 30, by - 8, 60, 3); for (let k = 0; k < 5; k++) ctx.fillRect(x - 26 + k * 12, by - 16, 8, 8); ctx.fillStyle = tn('#b8503a', P, .3, 'near'); ctx.fillRect(x - 28, by - 18, 56, 2); }
+}
+function drawKon2(P, a) {   // Alaaddin Tepesi, Çatalhöyük evleri
+  ctx.globalAlpha = a; ridge(.07, .35, 4, GROUND - 22, tn('#b89a8a', P, .45));
+  { const x = wrapX(120, .25, 400), by = GROUND - 16; ctx.fillStyle = tn('#5a9a4a', P, .4, 'mid2'); for (let dx = -50; dx <= 50; dx++) { const h = Math.round(22 * Math.cos(dx / 50 * Math.PI / 2)); ctx.fillRect(x + dx, by - h, 1, h); }
+    ctx.fillStyle = tn('#9a7a6a', P, .4, 'mid2'); ctx.fillRect(x - 20, by - 34, 34, 13); dome(x - 4, by - 34, 6); ctx.fillRect(x + 18, by - 50, 3, 30); ctx.fillRect(x + 17, by - 42, 5, 1);
+    ctx.fillStyle = tn('#6a8aa8', P, .35, 'mid2'); ctx.fillRect(x - 34, by - 30, 8, 9); for (let r = 0; r < 6; r++) ctx.fillRect(x - 34 + Math.round(r * .7), by - 31 - r, 8 - Math.round(r * 1.4), 1); }
+  for (let i = 0; i < 6; i++) { const x = wrapX(i * 36 + 240, .4, 380), by = GROUND - 12, hh = 10 + (i * 5) % 6; if (x < -20 || x > W + 20) continue; ctx.fillStyle = tn('#b8946a', P, .35, 'near'); ctx.fillRect(x, by - hh, 18, hh); ctx.fillStyle = tn('#6a4a2a', P, .3, 'near'); ctx.fillRect(x + 7, by - hh - 6, 1, 6); ctx.fillRect(x + 10, by - hh - 6, 1, 6); for (let k = 0; k < 3; k++) ctx.fillRect(x + 7, by - hh - 5 + k * 2, 4, 1); ctx.fillRect(x + 3, by - hh + 3, 3, 4); }
+  for (let x = 0; x < W; x++) { const h = 9 + nearH[(((x + bg * .55) | 0) % NEAR_L + NEAR_L) % NEAR_L] * .3 | 0; ctx.fillStyle = tn('#e8b848', P, .3, 'near'); ctx.fillRect(x, GROUND - h, 1, h); }
+}
+function drawAnk2(P, a) {   // Ulus Meydanı (Zafer Anıtı), TBMM binası
+  ctx.globalAlpha = a; ridge(.08, .45, 6, GROUND - 22, tn('#9a9aa8', P, .45));
+  const sil = tn('#8a7e88', P, .4, 'mid2'), sd = tn('#4a4458', P, .4, 'mid2');
+  { const x = wrapX(100, .28, 400), by = GROUND - 16; ctx.fillStyle = sil; ctx.fillRect(x - 46, by - 22, 92, 22); ctx.fillRect(x - 42, by - 25, 84, 3); ctx.fillRect(x - 7, by - 52, 14, 30); ctx.fillRect(x - 9, by - 54, 18, 3); for (let r = 0; r < 5; r++) ctx.fillRect(x - 6 + r, by - 59 + r, 12 - r * 2, 1);
+    ctx.fillStyle = sd; for (let i = -40; i < 40; i += 4) ctx.fillRect(x + i, by - 20, 2, 16); for (let yy = by - 48; yy < by - 26; yy += 6) { ctx.fillRect(x - 4, yy, 2, 4); ctx.fillRect(x + 2, yy, 2, 4); }
+    ctx.fillStyle = '#e30a17'; ctx.fillRect(x, by - 66, 1, 7); ctx.fillRect(x + 1, by - 66, 6, 4); ctx.fillStyle = '#ffffff'; ctx.fillRect(x + 3, by - 65, 1, 2); }
+  { const x = wrapX(290, .35, 380), by = GROUND - 14; ctx.fillStyle = tn('#c8b8a0', P, .35, 'mid2'); ctx.fillRect(x - 8, by - 20, 16, 20); ctx.fillRect(x - 10, by - 22, 20, 2);
+    ctx.fillStyle = tn('#4a3a28', P, .3, 'mid2'); ctx.fillRect(x - 6, by - 28, 11, 5); ctx.fillRect(x - 7, by - 30, 3, 3); ctx.fillRect(x + 4, by - 26, 2, 3); ctx.fillRect(x - 4, by - 23, 1, 2); ctx.fillRect(x + 2, by - 23, 1, 2); ctx.fillRect(x - 2, by - 36, 3, 8); ctx.fillRect(x - 1, by - 38, 2, 2); }
+  for (let i = 0; i < 5; i++) { const x = Math.round(((i * 31 + 40 - bg * .55 - Math.sin(time + i) * 3) % (W + 40) + W + 40) % (W + 40) - 20), y = GROUND - 5; ctx.fillStyle = '#8a8a94'; ctx.fillRect(x, y - 2, 3, 2); ctx.fillRect(x + 3, y - 3, 1, 1); }
+  nearFill(tn('#8a8a80', P, .3, 'near'));
+}
+function drawErz2(P, a) {   // Erzurum Kalesi, Tepsi Minare, Çifte Minareli
+  ctx.globalAlpha = a; ridge(.06, 1.2, 14, GROUND - 22, tn('#7a8ab0', P, .45), tn('#ffffff', P, .2), 26);
+  const sil = tn('#8a7a8a', P, .4, 'mid2');
+  { const x = wrapX(110, .28, 400), by = GROUND - 18; ctx.fillStyle = sil; ctx.fillRect(x - 40, by - 22, 80, 22); for (let i = -40; i < 40; i += 5) ctx.fillRect(x + i, by - 25, 3, 3); ctx.fillRect(x - 46, by - 30, 10, 30); ctx.fillRect(x + 36, by - 30, 10, 30);
+    ctx.fillRect(x - 4, by - 46, 9, 24); for (let r = 0; r < 6; r++) ctx.fillRect(x - 4 + r, by - 47 - r, 9 - r * 2, 1); litWin(P, x - 1, by - 40, 2, 2); }
+  { const x = wrapX(290, .32, 380), by = GROUND - 16; ctx.fillStyle = sil; ctx.fillRect(x - 14, by - 24, 28, 24); for (const mx of [x - 13, x + 9]) { ctx.fillRect(mx, by - 50, 4, 26); ctx.fillRect(mx - 1, by - 40, 6, 2); } ctx.fillStyle = tn('#2ab0c0', P, .4, 'mid2'); ctx.fillRect(x - 12, by - 44, 2, 1); ctx.fillRect(x + 10, by - 44, 2, 1); }
+  nearFill(tn('#f2f6fc', P, .3, 'near'));
+}
+function drawAdi2(P, a) {   // Atatürk Barajı gölü, Cendere Köprüsü, Perre kaya mezarları
+  ctx.globalAlpha = a; ridge(.07, .8, 8, GROUND - 30, tn('#b86a4a', P, .45));
+  river(P, GROUND - 30, 16, '#3a8ab0');
+  { const x = wrapX(260, .2, 420); ctx.fillStyle = tn('#c8c0b0', P, .4); ctx.fillRect(x - 60, GROUND - 34, 120, 4); }
+  { const x = wrapX(120, .35, 400), by = GROUND - 14; ctx.fillStyle = tn('#a87858', P, .35, 'mid2'); ctx.fillRect(x - 50, by - 24, 100, 6);
+    for (let dx = -26; dx <= 26; dx++) { const h = Math.round(18 * Math.sqrt(Math.max(0, 1 - (dx / 26) ** 2))); ctx.fillRect(x + dx, by - 18, 1, 18 - h); } ctx.fillRect(x - 50, by - 18, 24, 18); ctx.fillRect(x + 26, by - 18, 24, 18);
+    for (const dx of [-46, -40, 40]) { ctx.fillRect(x + dx, by - 40, 3, 16); ctx.fillRect(x + dx - 1, by - 41, 5, 1); } }
+  { const x = wrapX(330, .45, 360), by = GROUND - 12; ctx.fillStyle = tn('#a85a3a', P, .3, 'near'); ctx.fillRect(x - 30, by - 30, 60, 30); ctx.fillStyle = tn('#3a1a0e', P, .2, 'near'); for (let k = 0; k < 4; k++) { ctx.fillRect(x - 24 + k * 13, by - 22, 6, 9); ctx.fillRect(x - 23 + k * 13, by - 23, 4, 1); } }
+  nearFill(tn('#b8845a', P, .3, 'near'));
+}
+function drawAnt2(P, a) {   // Aspendos Tiyatrosu, Konyaaltı plajı ve şemsiyeler
+  ctx.globalAlpha = a; const WT = GROUND - 30;
+  ridge(.06, .9, 12, WT, tn('#6a7aa8', P, .45), tn('#e8eef8', P, .3), 36);
+  { const x = wrapX(110, .22, 400), by = WT + 2; ctx.fillStyle = tn('#d89a6a', P, .4, 'mid2'); for (let dx = -48; dx <= 48; dx++) { const h = Math.round(30 * Math.sqrt(1 - (dx / 48) ** 2)); ctx.fillRect(x + dx, by - h, 1, h); }
+    ctx.fillStyle = tn('#a86a3a', P, .35, 'mid2'); for (let r = 1; r < 6; r++) for (let dx = -46; dx <= 46; dx += 1) { const h = Math.round(30 * Math.sqrt(1 - (dx / 48) ** 2)); if (h > r * 5) ctx.fillRect(x + dx, by - r * 5, 1, 1); }
+    ctx.fillStyle = tn('#e0a470', P, .35, 'mid2'); ctx.fillRect(x - 50, by - 6, 100, 6); ctx.fillStyle = tn('#5a3418', P, .3, 'mid2'); for (let dx = -44; dx < 44; dx += 8) ctx.fillRect(x + dx, by - 5, 3, 4); }
+  for (let y = WT; y < GROUND - 8; y++) { const t = (y - WT) / 22; ctx.fillStyle = css(mix(mix(P.bot, [40, 170, 200], .65), mix(P.mid, [20, 110, 170], .6), t)); ctx.fillRect(0, y, W, 1); }
+  ctx.fillStyle = `rgba(255,255,255,${.3 + .3 * (1 - P.night)})`; for (let x = -((bg * .5) % 10); x < W; x += 10) ctx.fillRect(Math.round(x), GROUND - 9, 5, 1);
+  ctx.fillStyle = tn('#f0d8a0', P, .25, 'near'); ctx.fillRect(0, GROUND - 8, W, 8);
+  for (let i = 0; i < 6; i++) { const x = wrapX(i * 61 + 20, .55, 366), y = GROUND - 8; if (x < -8 || x > W + 8) continue; ctx.fillStyle = '#6a5a4a'; ctx.fillRect(x, y - 9, 1, 9); ctx.fillStyle = ['#e8413f', '#2f9ae0', '#ffd23f', '#4cc04a'][i % 4]; for (let k = 0; k < 3; k++) ctx.fillRect(x - 5 + k, y - 10 + k, 11 - k * 2, 1); ctx.fillStyle = '#ffffff'; ctx.fillRect(x - 4, y - 10, 2, 1); ctx.fillRect(x + 1, y - 10, 2, 1); }
+}
 const nearFill = (col) => { ctx.fillStyle = col; for (let x = 0; x < W; x++) { const h = nearH[(((x + bg * .55) | 0) % NEAR_L + NEAR_L) % NEAR_L]; ctx.fillRect(x, GROUND - h, 1, h); } };
 /* Ankara: kale tepesi, Anıtkabir, Atakule, apartmanlar */
 function drawAnkara(P, a) {
@@ -1820,10 +1979,12 @@ function drawAnkara(P, a) {
   for (let k = 0; k < 3; k++) { const x = wrapX(50 + k * 135, .3, 405), by = GROUND - 16; if (x < -60 || x > W + 60) continue; ctx.fillStyle = sil;
     if (k === 0) { for (let dx = -30; dx <= 30; dx++) { const h = Math.round(20 * Math.cos(dx / 30 * Math.PI / 2)); ctx.fillRect(x + dx, by - h, 1, h); }   // kale tepesi
       ctx.fillRect(x - 16, by - 32, 32, 12); for (let i = -16; i < 16; i += 4) ctx.fillRect(x + i, by - 35, 2, 3); ctx.fillRect(x - 20, by - 38, 6, 18); ctx.fillRect(x + 14, by - 38, 6, 18); }
-    else if (k === 1) { ctx.fillRect(x - 26, by - 10, 52, 10); ctx.fillRect(x - 22, by - 24, 44, 14); ctx.fillRect(x - 24, by - 27, 48, 3);   // Anıtkabir
-      ctx.fillStyle = sd; for (let i = -20; i < 20; i += 4) ctx.fillRect(x + i, by - 23, 2, 12); }
-    else { ctx.fillRect(x - 1, by - 60, 3, 60); ctx.fillRect(x - 6, by - 58, 13, 5); ctx.fillRect(x - 4, by - 61, 9, 3); ctx.fillRect(x, by - 66, 1, 5);   // Atakule
-      for (let i = 0; i < 4; i++) { const hx2 = x + 10 + i * 10, hh = 14 + (i * 9) % 12; ctx.fillStyle = sil; ctx.fillRect(hx2, by - hh, 8, hh); for (let wy = by - hh + 3; wy < by - 2; wy += 4) litWin(P, hx2 + 2, wy, 1, 2); } } }
+    else if (k === 1) {   // Hacı Bayram Veli Camii (piramit çatı, tuğla minare) + Augustus Tapınağı duvarı
+      ctx.fillRect(x - 18, by - 14, 36, 14); for (let r = 0; r < 9; r++) ctx.fillRect(x - 18 + r * 2, by - 15 - r, 36 - r * 4, 1);
+      ctx.fillStyle = tn('#a8604a', P, .4, 'mid2'); ctx.fillRect(x + 20, by - 46, 4, 46); ctx.fillRect(x + 19, by - 34, 6, 2); ctx.fillRect(x + 21, by - 52, 2, 6);
+      ctx.fillStyle = sd; for (let i = -14; i < 14; i += 5) ctx.fillRect(x + i, by - 10, 2, 4); litWin(P, x - 8, by - 10, 2, 3); litWin(P, x + 6, by - 10, 2, 3);
+      ctx.fillStyle = tn('#c8b8a0', P, .4, 'mid2'); ctx.fillRect(x - 46, by - 20, 4, 20); ctx.fillRect(x - 40, by - 16, 3, 16); ctx.fillRect(x - 46, by - 22, 12, 2); ctx.fillRect(x - 32, by - 12, 3, 12); }
+    else { for (let i = 0; i < 6; i++) { const hx2 = x - 20 + i * 11, hh = 14 + (i * 9) % 14; ctx.fillStyle = sil; ctx.fillRect(hx2, by - hh, 9, hh); for (let wy = by - hh + 3; wy < by - 2; wy += 4) litWin(P, hx2 + 2, wy, 1, 2); } } }
   nearFill(tn('#5aa04a', P, .3, 'near'));
 }
 /* Erzurum: Palandöken, telesiyej, Üç Kümbetler */
@@ -2023,7 +2184,7 @@ function drawWorld(P) {
       { const sx = Math.round(o.cx), sy = o.y0 - 8 + Math.round(Math.sin(time * 4) * 2) + Math.round(o.dy || 0); wctx.fillStyle = '#ffd23f'; for (let k = 0; k < 4; k++) wctx.fillRect(sx - k, sy - 3 + k, k * 2 + 1, 1); for (let k = 0; k < 3; k++) wctx.fillRect(sx - 2 + k, sy + 1 + k, 5 - k * 2, 1); wctx.fillStyle = '#fff6b0'; wctx.fillRect(sx, sy - 1, 1, 2); }
       if (Math.random() < .3) parts.push({ x: o.cx + rand(-o.w / 2, o.w / 2), y: o.y0 + rand(0, 30), vx: 0, vy: -20, life: .6, max: .6, c: '#fff6b0', g: 0 }); }
     wctx.drawImage(o.img, ox, oy); }
-  if (finGate) drawCrownGate(Math.round(finGate.x));
+  if (finGate) drawGate(Math.round(finGate.x));
   if (curReg === 3 || regFrom === 3) { const cy = 5; wctx.globalAlpha = curReg === 3 ? regT : 1 - regT; wctx.fillStyle = '#2a2a30'; wctx.fillRect(0, cy, W, 1);
     for (const o of obs) if (o.style === 'teleferik') { const x = Math.round(o.cx), y = cy + Math.round(o.dy || 0) - 18 + 18; wctx.fillRect(x - 1, cy - 1, 3, 2); wctx.fillRect(x, cy, 1, Math.max(0, o.y1 - 20 + Math.round(o.dy || 0) - cy)); }
     wctx.globalAlpha = 1; }
