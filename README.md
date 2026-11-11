@@ -4,7 +4,7 @@ Balonlu bir sincapla Türkiye'yi gez! Flappy Bird tarzı, tek dokunuşla oynanan
 
 **Oyna:** https://serdar5884.github.io/ucan-sincap/
 
-- 9 şehir: Kapadokya, İstanbul, Sivas, Erzurum, Adıyaman, Bursa, Konya, Ankara, Antalya
+- 9 şehir: Nevşehir (Kapadokya), İstanbul, Sivas, Erzurum, Adıyaman, Bursa, Konya, Ankara, Antalya
 - 36 bölüm (18 Gezgin + 18 Usta), kolaydan zora
 - Her şehrin tarihi yapıları, Büyük Kapısı, lezzetleri, kartpostalları ve müziği
 - Garaj: sincap türleri, balonlar, şapkalar, uçuş izleri, güçler

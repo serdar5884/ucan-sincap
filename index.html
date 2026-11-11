@@ -223,7 +223,7 @@ body{font-family:var(--font);color:#fff;-webkit-user-select:none;user-select:non
       <div class="menuBottom">
         <button id="btnStart" class="btn orange big ol">BAŞLA</button>
         <button id="btnLevels" class="btn teal ol lvopen">BÖLÜMLER</button>
-        <div id="cityPick" class="cityPick ol" hidden><button id="cpL" class="btn small ol" aria-label="Önceki şehir">◀</button><span id="cpName">Kapadokya'dan başla</span><button id="cpR" class="btn small ol" aria-label="Sonraki şehir">▶</button></div>
+        <div id="cityPick" class="cityPick ol" hidden><button id="cpL" class="btn small ol" aria-label="Önceki şehir">◀</button><span id="cpName">Nevşehir'den başla</span><button id="cpR" class="btn small ol" aria-label="Sonraki şehir">▶</button></div>
         <div class="menuStats ol">En iyi: <b id="mBest">0</b> · Toplam fındık: <b id="mNuts">0</b><br>Gezilen şehir: <b class="num"><span id="mReg">1</span>/<span id="mRegN">9</span></b><div id="evLine" class="evline"></div></div>
         <div class="row">
           <button id="btnGarage" class="btn teal small ol">GARAJ</button>
@@ -1169,7 +1169,7 @@ let gTab = 'ch', gPrevCh = selCh, gPrevBl = selBl, gPrevHat = selHat, gEarT = 0;
 
 /* Bölgeler: her SEC kapıda bir sonraki bölgeye geçilir, sonra başa döner */
 const REG = [
-  { n: "Kapadokya'dasın!", tip: 'Üzüm topla: +3 fındık', wx: {}, gp: () => GP },
+  { n: "Nevşehir'desin!", tip: 'Üzüm topla: +3 fındık', wx: {}, gp: () => GP },
   { n: "İstanbul'dasın!", tip: 'Simit topla: +3 fındık', wx: {}, gp: () => GPI, feat: 'simit' },
   { n: "Sivas'tasın!", tip: 'Sivas köftesi topla: +3 fındık', wx: { snow: .6 }, gp: () => GPE },
   { n: "Bursa'dasın!", tip: 'Kestane şekeri topla · teleferiğe dikkat!', wx: {}, gp: () => GPK, feat: 'hareket' },
@@ -1194,7 +1194,7 @@ const LMK = {
   perre: 'Perre Antik Kenti · kaya mezarları', aspendos: 'Aspendos Tiyatrosu · Roma dönemi', alaaddin: 'Alaaddin Tepesi · Selçuklu eserleri', ulucami: 'Bursa Ulu Cami · 20 kubbeli'
 };
 const CITY_LM = [['peri', 'kale'], ['galata', 'kiz', 'saat', 'dikilitas'], ['cifte', 'kumbet', 'gok', 'divrigi'], ['yesil', 'teleferik', 'tophane', 'ulucami'], ['mevlana', 'ince', 'alaaddin'], ['ankale', 'hacibayram', 'meclis', 'ulus', 'atakule'], ['uckumbet', 'yakutiye', 'erzkale'], ['nemrut', 'cendere', 'perre'], ['yivli', 'hadrian', 'aspendos']];
-const CITY_NAME = ['Kapadokya', 'İstanbul', 'Sivas', 'Bursa', 'Konya', 'Ankara', 'Erzurum', 'Adıyaman', 'Antalya'], CITY_FROM = ["Kapadokya'dan", "İstanbul'dan", "Sivas'tan", "Bursa'dan", "Konya'dan", "Ankara'dan", "Erzurum'dan", "Adıyaman'dan", "Antalya'dan"];
+const CITY_NAME = ['Nevşehir', 'İstanbul', 'Sivas', 'Bursa', 'Konya', 'Ankara', 'Erzurum', 'Adıyaman', 'Antalya'], CITY_FROM = ["Nevşehir'den", "İstanbul'dan", "Sivas'tan", "Bursa'dan", "Konya'dan", "Ankara'dan", "Erzurum'dan", "Adıyaman'dan", "Antalya'dan"];
 const LM_NAME = { peri: 'Peri Bacası', kale: 'Kaya Kale', galata: 'Galata Kulesi', kiz: 'Kız Kulesi', saat: 'Dolmabahçe Saat Kulesi', cifte: 'Çifte Minareli Medrese', gok: 'Gök Medrese', kumbet: 'Selçuklu Kümbeti', yesil: 'Yeşil Türbe', tophane: 'Tophane Saat Kulesi', teleferik: 'Uludağ Teleferiği', mevlana: 'Mevlâna Türbesi', ince: 'İnce Minareli Medrese', anit: 'Anıtkabir', atakule: 'Atakule', ankale: 'Ankara Kalesi', uckumbet: 'Üç Kümbetler', yakutiye: 'Yakutiye Medresesi', nemrut: 'Nemrut Dağı', cendere: 'Cendere Köprüsü', yivli: 'Yivli Minare', hadrian: 'Hadrian Kapısı', dikilitas: 'Dikilitaş', divrigi: 'Divriği Ulu Camii', hacibayram: 'Hacı Bayram Veli Camii', meclis: 'TBMM Binası', ulus: 'Ulus Meydanı', erzkale: 'Erzurum Kalesi', perre: 'Perre Antik Kenti', aspendos: 'Aspendos Tiyatrosu', alaaddin: 'Alaaddin Tepesi', ulucami: 'Bursa Ulu Cami' };
 const START_COST = [0, 15, 30, 45, 60, 75, 90, 105, 120];
 const CARDS = [
@@ -1214,7 +1214,7 @@ const POSTCARD = (() => { const c = document.createElement('canvas'); c.width = 
   for (let x = 1; x < 10; x++) { g.fillStyle = x % 2 ? '#e8413f' : '#2f7ae0'; g.fillRect(x, 1, 1, 1); g.fillRect(x, 6, 1, 1); }
   g.fillStyle = '#e8413f'; g.fillRect(7, 2, 2, 2); g.fillStyle = '#8a7a6a'; g.fillRect(2, 3, 4, 1); g.fillRect(2, 4, 3, 1); return c; })();
 const RFACT = [
-  ['Peri bacaları volkanik tüfün aşınmasıyla oluştu', 'Göreme Açık Hava Müzesi UNESCO listesinde', 'Sıcak hava balonlarıyla dünyaca ünlü'],
+  ['Nevşehir, Kapadokya bölgesinin kalbidir', 'Peri bacaları volkanik tüfün aşınmasıyla oluştu', 'Göreme Açık Hava Müzesi UNESCO listesinde', 'Sıcak hava balonlarıyla dünyaca ünlü'],
   ['İki kıtayı birleştiren şehir', 'Ayasofya ve Sultanahmet Camii burada', 'Boğaz vapuru ve simitçiler'],
   ['Divriği Ulu Camii UNESCO listesinde', 'Kangal köpeğinin memleketi', 'Sivas köftesi meşhurdur'],
   ['Osmanlının ilk başkentlerinden', 'Ulu Cami 20 kubbelidir', 'İskender kebap ve kestane şekeri'],
@@ -1278,7 +1278,7 @@ function mEvent(k, v = 1) {
     if (m.p >= m.n) { m.p = m.n; m.done = true; tagQ.unshift('★ Görev tamam: ' + d.t(m.n) + ' · menüden ödülünü al'); sfx.medal ? sfx.medal() : sfx.shield(); } }
   if (ch) store.set('pbu_mis', mis);
 }
-const LV_ORDER = [0, 1, 2, 6, 7, 3, 4, 5, 8];   // Kapadokya, İstanbul, Sivas, Erzurum, Adıyaman, Bursa, Konya, Ankara, Antalya
+const LV_ORDER = [0, 1, 2, 6, 7, 3, 4, 5, 8];   // Nevşehir, İstanbul, Sivas, Erzurum, Adıyaman, Bursa, Konya, Ankara, Antalya
 const cityPos = ci => LV_ORDER.indexOf(ci);
 const LV_N = 36, USTA = 19, isUsta = L => L >= USTA, lvCity = L => LV_ORDER[Math.floor((L - 1) / 2) % 9], lvPart = L => (L - 1) % 2 + 1, lvLen = L => 30 + Math.floor((L - 1) * .58);
 let lvMax = store.get('pbu_lvmax', 0) | 0, lvStars = store.get('pbu_lvs', null);
@@ -1423,7 +1423,7 @@ function updCityPick() {
   const box = $('cityPick'); box.hidden = maxReg < 1; if (maxReg < 1) { startCity = 0; $('btnStart').textContent = 'BAŞLA'; return; }
   startCity = clamp(startCity, 0, Math.min(maxReg, REG.length - 1));
   const c = START_COST[startCity], ok = totalNuts >= c;
-  $('cpName').innerHTML = startCity ? `${CITY_FROM[startCity]} başla <span class="cpc${ok ? '' : ' no'}"><img src="${NUT_URL}" alt="fındık">${c}</span>` : "Kapadokya'dan başla";
+  $('cpName').innerHTML = startCity ? `${CITY_FROM[startCity]} başla <span class="cpc${ok ? '' : ' no'}"><img src="${NUT_URL}" alt="fındık">${c}</span>` : "Nevşehir'den başla";
   $('btnStart').textContent = startCity && !ok ? 'FINDIK YETMEZ' : 'BAŞLA'; $('btnStart').classList.toggle('locked', !!startCity && !ok);
   $('cpL').disabled = startCity === 0; $('cpR').disabled = startCity >= Math.min(maxReg, REG.length - 1);
 }
