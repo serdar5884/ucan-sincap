@@ -168,3 +168,4 @@ Sıra: Kapadokya(0) → İstanbul(1) → Sivas(2) → Bursa(3) → Konya(4) → 
 
 ## Menü yazıları sadeleşti (11 Kasım 2026)
 - Ana menüde `.ol` kalın kontur/gölge kaldırıldı (çizik gibi görünüyordu). Başlıkta hafif tek gölge; alt yazı, istatistikler ve ipucu yarı saydam koyu zeminli kutularda, gölgesiz.
+- Ana menü başlığı: "UÇAN SİNCAP" ve alt yazı yarı saydam koyu, ince açık çerçeveli bir zemin kutusunda; başlık rengi açık altın (#ffe08a).
