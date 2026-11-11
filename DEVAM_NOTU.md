@@ -165,3 +165,6 @@ Sıra: Kapadokya(0) → İstanbul(1) → Sivas(2) → Bursa(3) → Konya(4) → 
   - Adıyaman 1: Nemrut başları · 2: Cendere, **Perre** (`makePerre`); arka plan Atatürk Barajı gölü, Cendere Köprüsü, kaya mezarları.
   - Antalya 1: Yivli Minare, Hadrian · 2: **Aspendos** (`makeAspendos`), palmiye; arka plan Aspendos tiyatrosu, Konyaaltı plajı ve şemsiyeler.
 - Pasaporta yeni yapılar eklendi (`CITY_LM`, `LMK`, `LM_NAME`).
+
+## Menü yazıları sadeleşti (11 Kasım 2026)
+- Ana menüde `.ol` kalın kontur/gölge kaldırıldı (çizik gibi görünüyordu). Başlıkta hafif tek gölge; alt yazı, istatistikler ve ipucu yarı saydam koyu zeminli kutularda, gölgesiz.
