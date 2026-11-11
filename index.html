@@ -1201,7 +1201,7 @@ const REG = [
   { n: "İstanbul'dasın!", tip: 'Simit topla: +3 fındık', wx: {}, gp: () => GPI, feat: 'simit' },
   { n: "Sivas'tasın!", tip: 'Sivas köftesi topla: +3 fındık', wx: { snow: .6 }, gp: () => GPE },
   { n: "Bursa'dasın!", tip: 'Kestane şekeri topla · teleferiğe dikkat!', wx: {}, gp: () => GPK, feat: 'hareket' },
-  { n: "Konya'dasın!", tip: 'Etli ekmek topla · altın palamut bol!', wx: { wind: .35 }, gp: () => GPW, feat: 'altin' },
+  { n: "Konya'dasın!", tip: 'Etli ekmek topla · palamutlar biraz daha sık', wx: { wind: .35 }, gp: () => GPW, feat: 'altin' },
   { n: "Ankara'dasın!", tip: 'Ankara armudu topla: +3 fındık', wx: {}, gp: () => GPK },
   { n: "Erzurum'dasın!", tip: 'Cağ kebabı topla · rüzgâra dikkat!', wx: { snow: 1, wind: .6 }, gp: () => GPE, feat: 'ruzgar' },
   { n: "Adıyaman'dasın!", tip: 'Çiğ köfte topla · palamut bol!', wx: { wind: .2 }, gp: () => GPN, feat: 'palamut' },
@@ -1624,13 +1624,13 @@ function addGate(cx) {
   for (const o of [ob, ot]) if (o) { o.mv = o.top ? mv : null; o.dy = 0; o.reg = reg; obs.push(o); }
   gates.push({ cx, passed: false, reg, ri, mv, gy, boss, warned: false });
   if (boss) { finGate = { x: cx + 250, passed: false, warned: false }; lastBoss = true; lvCoins += 7; for (let i = 0; i < 7; i++) { const u = i / 6; items.push({ x: cx + 50 + u * 160, y: gy - Math.sin(u * Math.PI) * 30, type: i === 3 ? 'acorn' : 'nut', t: rand(0, 6) }); } }
-  const coin = () => Math.random() < (reg === 1 || reg === 8 ? .42 : .32) ? 'spc' : ft === 'altin' ? (Math.random() < .5 ? 'acorn' : 'nut') : ft === 'palamut' && Math.random() < .3 ? 'acorn' : Math.random() < (perk === 'cizgili' ? .24 : .12) ? 'acorn' : 'nut';
+  const coin = () => Math.random() < (reg === 1 || reg === 8 ? .42 : .32) ? 'spc' : ft === 'altin' ? (Math.random() < .22 ? 'acorn' : 'nut') : ft === 'palamut' && Math.random() < .3 ? 'acorn' : Math.random() < (perk === 'cizgili' ? .24 : .12) ? 'acorn' : 'nut';
   if (gateN > 4 && shieldT <= 0 && !items.some(i => i.type === 'shield' && !i.taken) && Math.random() < .1) items.push({ x: cx, y: gy, type: 'shield', t: rand(0, 6) });
   else if (gateN > 6 && magT <= 0 && !items.some(i => i.type === 'magnet' && !i.taken) && Math.random() < .08) items.push({ x: cx, y: gy, type: 'magnet', t: rand(0, 6) });
   else if (!boss && Math.random() < .06 && !items.some(i => i.type === 'card' && !i.taken)) items.push({ x: cx, y: gy + rand(-g * .2, g * .2), type: 'card', reg, t: rand(0, 6) });
-  else if (ft === 'altin' || Math.random() < .72) { items.push({ x: cx, y: gy + rand(-g * .22, g * .22), type: coin(), reg, t: rand(0, 6) }); lvCoins++; }
-  if (prevGy !== null && (ft === 'altin' ? true : Math.random() < .35)) {
-    const n = ft === 'altin' ? 3 : 1;
+  else if (Math.random() < .72) { items.push({ x: cx, y: gy + rand(-g * .22, g * .22), type: coin(), reg, t: rand(0, 6) }); lvCoins++; }
+  if (prevGy !== null && Math.random() < .35) {
+    const n = 1;
     for (let i = 0; i < n; i++) { const u = (i + 1) / (n + 1); items.push({ x: cx - spacing() * (1 - u), y: prevGy + (gy - prevGy) * u - Math.sin(u * Math.PI) * (n > 1 ? 14 : 0), type: n > 1 && i === 1 ? 'acorn' : 'nut', lvc: lvCoins++, t: rand(0, 6) }); }
   }
   if (ft === 'termal' && gateN % SEC !== 0) vents.push({ x: cx + spacing() / 2, p: rand(0, 6) });
