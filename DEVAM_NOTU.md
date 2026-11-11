@@ -172,3 +172,8 @@ Sıra: Kapadokya(0) → İstanbul(1) → Sivas(2) → Bursa(3) → Konya(4) → 
 
 ## Kapadokya → Nevşehir (11 Kasım 2026)
 - Şehir adı Nevşehir oldu (`CITY_NAME[0]`, `CITY_FROM`, giriş yazısı "Nevşehir'desin!", arka plan filigranı NEVŞEHİR, bilgi notuna "Nevşehir, Kapadokya bölgesinin kalbidir"). Arka plan, engeller ve "Kapadokya Şafağı" balonu aynı kaldı.
+
+## Sivas yapıları (12 Kasım 2026)
+- 1. yol engelleri: Çifte Minareli, **Sivas Ulu Camii** (`makeMinaret(...,"sivasulu")`, sırsız tuğla örgü), **Buruciye Medresesi** (`makeBuruciye`, kubbe + mukarnaslı taç kapı), kümbet. Arka plana Ulu Cami (alçak harim + eğri tuğla minare) ve Buruciye eklendi.
+- 2. yol engelleri: Gök Medrese, Divriği Ulu Camii, **Kangal Köpeği heykeli** (`makeKangal`, `KANGAL` sprite kaide üstünde; heykel bölgesi şeffaf boyanıp sprite üstüne çizilir). 2. yol arka planında koyun sürüsünün yanında Kangal köpeği yürür.
+- Pasaporta sivasulu, buruciye, kangal eklendi.

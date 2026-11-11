@@ -733,7 +733,7 @@ function makeMinaret(cx, y0, w, lm) {
     if (y < GROUND - base + 4) return W2 * .95;
     return W2 * .88; };
   o.palAt = y => y - y0 < 9 ? TURQ : (y >= GROUND - base ? STONE : BRICK); o.isCap = y => y - y0 < 9 || y >= GROUND - base;
-  o.deco = (g, half, yA) => { if (lm === 'yivli') { g.fillStyle = '#7a4028'; for (let y = y0 + 13; y < GROUND - base; y++) for (let x = -Math.round(sw) + 1; x < sw; x += 2) g.fillRect(half + x, y - yA, 1, 1); } else tileBands(g, half, yA, y0 + 16, GROUND - base - 4, o.hw, 11);
+  o.deco = (g, half, yA) => { if (lm === 'sivasulu') { g.fillStyle = '#7a3a22'; for (let y = y0 + 13; y < GROUND - base; y += 3) for (let x = -Math.round(sw) + 1 + ((y / 3) | 0) % 2 * 2; x < sw; x += 4) g.fillRect(half + x, y - yA, 2, 1); } else if (lm === 'yivli') { g.fillStyle = '#7a4028'; for (let y = y0 + 13; y < GROUND - base; y++) for (let x = -Math.round(sw) + 1; x < sw; x += 2) g.fillRect(half + x, y - yA, 1, 1); } else tileBands(g, half, yA, y0 + 16, GROUND - base - 4, o.hw, 11);
     g.fillStyle = '#2a2a30'; for (let x = -Math.round(sw) - 2; x <= sw + 2; x += 2) g.fillRect(half + x, y0 + 12 - yA, 1, 1);
     portal(g, half, yA, GROUND - base + 10, Math.max(4, Math.round(W2 * .38))); };
   bakeObs(o); return o;
@@ -887,6 +887,34 @@ function makeDivrigi(cx, y0, w) {
     g.fillStyle = '#2ab0c0'; for (const dx of [-Math.round(W2 * .7), Math.round(W2 * .7) - 1]) { g.fillRect(half + dx - 1, top + 2, 3, 3); } };
   bakeObs(o); return o;
 }
+/* --- Sivas: Buruciye Medresesi (kubbeli taç kapı) --- */
+function makeBuruciye(cx, y0, w) {
+  const W2 = w / 2 + 3, o = { top: false, cx, y0, w: W2 * 2, style: 'buruciye', lm: 'buruciye', seed: randi(0, 999), wins: [], noStrata: true, pal: STONE };
+  o.hw = y => { if (y < y0) return 0; const k = y - y0; if (k < 2) return 1.5; if (k < 13) { const u = (13 - k) / 11; return W2 * .5 * Math.sqrt(1 - u * u) + 1; } if (k < 16) return W2 * .62; return W2 * .92; };
+  o.palAt = y => y - y0 < 13 ? LEAD : STONE; o.isCap = y => y - y0 < 16;
+  o.deco = (g, half, yA) => { g.fillStyle = '#ffd23f'; g.fillRect(half, 0, 1, 2);
+    const iw = Math.round(W2 * .45), top = y0 + 22 - yA; g.fillStyle = '#3a2a1e'; g.fillRect(half - iw, top + iw, iw * 2, GROUND - yA - top - iw); for (let k = 0; k <= iw; k++) { const hw = Math.round(iw * Math.sqrt(1 - Math.pow(1 - k / iw, 2))); g.fillRect(half - hw, top + k, hw * 2, 1); }
+    g.fillStyle = '#c8b898'; for (let k = 2; k < iw * 2 - 1; k += 3) for (let r = 0; r < 4; r++) g.fillRect(half - iw + k, top + iw + 2 + r * 4, 1, 2);
+    g.fillStyle = '#2ab0c0'; g.fillRect(half - Math.round(W2 * .8), y0 + 18 - yA, Math.round(W2 * 1.6), 2); };
+  bakeObs(o); return o;
+}
+/* --- Sivas: Kangal köpeği heykeli (kaide üstünde) --- */
+const KANGAL = pix(18, 13, (x, y) => {
+  const body = '#d8b07a', dk = '#a87a48', mask = '#2a1a12';
+  if (y >= 9 && (x === 3 || x === 5 || x === 11 || x === 13)) return y === 12 ? mask : dk;   // bacaklar
+  if (y >= 4 && y <= 9 && x >= 2 && x <= 14) return y === 9 ? dk : (y === 4 ? '#e8c890' : body);   // gövde
+  if (x >= 13 && x <= 17 && y >= 1 && y <= 6) { if (x >= 16 && y >= 3) return mask; if (x === 14 && y <= 2) return mask; return body; }   // baş + siyah maske
+  if (x <= 2 && y >= 1 && y <= 4 && (x + y) % 3 !== 2) return body;   // kıvrık kuyruk
+  return null; });
+function makeKangal(cx, y0, w) {
+  const W2 = w / 2, o = { top: false, cx, y0, w, style: 'kangal', lm: 'kangal', seed: randi(0, 999), wins: [], noStrata: true, pal: STONE };
+  const NONE = { o: 'rgba(0,0,0,0)', l: 'rgba(0,0,0,0)', b: 'rgba(0,0,0,0)', h: 'rgba(0,0,0,0)', s: 'rgba(0,0,0,0)' };
+  o.hw = y => { if (y < y0) return 0; const k = y - y0; if (k < 26) return 9; if (k < 29) return W2 * .8; if (GROUND - y < 10) return W2 * .95; return W2 * .62; };
+  o.palAt = y => y - y0 < 26 ? NONE : STONE; o.isCap = y => y - y0 >= 26 && y - y0 < 29;
+  o.deco = (g, half, yA) => { g.save(); g.imageSmoothingEnabled = false; g.drawImage(KANGAL, half - 18, y0 - yA, 36, 26); g.restore();
+    g.fillStyle = '#8a7a64'; g.fillRect(half - Math.round(W2 * .5), y0 + 36 - yA, Math.round(W2), 1); g.fillRect(half - Math.round(W2 * .5), y0 + 40 - yA, Math.round(W2), 1); };
+  bakeObs(o); return o;
+}
 /* --- Ankara: TBMM binası kulesi --- */
 function makeMeclis(cx, y0, w) {
   const W2 = w / 2 + 4, o = { top: false, cx, y0, w: W2 * 2, style: 'meclis', lm: 'meclis', seed: randi(0, 999), wins: [], noStrata: true, pal: CREAM };
@@ -952,7 +980,7 @@ function makeBoss(cx, y0, w, reg) {
 function makeBottom(cx, y0, w, reg, mv) {
   const p2 = lvPart(level) === 2, r = Math.random();
   if (reg === 1) { if (p2) return r < .55 ? (forceStyle = 'saat', (() => { const o = makeIstTower(cx, y0, w); forceStyle = null; return o; })()) : makeObelisk(cx, y0, w); forceStyle = pick(['galata', 'kiz']); const o = makeIstTower(cx, y0, w); forceStyle = null; return o; }
-  if (reg === 2) return p2 ? (r < .5 ? makeMinaret(cx, y0, w, 'gok') : makeDivrigi(cx, y0, w)) : (r < .55 ? makeMinaret(cx, y0, w, 'cifte') : makeKumbet(cx, y0, w));
+  if (reg === 2) return p2 ? (r < .34 ? makeMinaret(cx, y0, w, 'gok') : r < .68 ? makeDivrigi(cx, y0, w) : makeKangal(cx, y0, w)) : (r < .28 ? makeMinaret(cx, y0, w, 'cifte') : r < .52 ? makeMinaret(cx, y0, w, 'sivasulu') : r < .78 ? makeBuruciye(cx, y0, w) : makeKumbet(cx, y0, w));
   if (reg === 3) return p2 ? (r < .5 ? makeTophane(cx, y0, w) : makeMinaret(cx, y0, w, 'ulucami')) : makeYesil(cx, y0, w);
   if (reg === 4) return p2 ? (r < .5 ? makeMinaret(cx, y0, w, 'ince') : makeKumbet(cx, y0, w, 'alaaddin')) : makeMevlana(cx, y0, w);
   if (reg === 5) return p2 ? (r < .4 ? makeMeclis(cx, y0, w) : r < .75 ? makeUlus(cx, y0, w) : makeAtakule(cx, y0, w)) : (r < .5 ? makeAnKale(cx, y0, w) : makeMinaret(cx, y0, w, 'hacibayram'));
@@ -1189,13 +1217,13 @@ const LMK = {
   uckumbet: 'Üç Kümbetler · Erzurum', yakutiye: 'Yakutiye Medresesi · 1310',
   nemrut: 'Nemrut Dağı · dev taş başlar, UNESCO', cendere: 'Cendere Köprüsü · Roma döneminden',
   yivli: 'Yivli Minare · Antalya\'nın simgesi', hadrian: 'Hadrian Kapısı · MS 130',
-  dikilitas: 'Dikilitaş · 3500 yıllık, Mısır\'dan getirildi', divrigi: 'Divriği Ulu Camii · 1228, UNESCO', hacibayram: 'Hacı Bayram Veli Camii · 15. yüzyıl',
+  dikilitas: 'Dikilitaş · 3500 yıllık, Mısır\'dan getirildi', divrigi: 'Divriği Ulu Camii · 1228, UNESCO', sivasulu: 'Sivas Ulu Camii · 1197, eğri minaresiyle ünlü', buruciye: 'Buruciye Medresesi · 1271', kangal: 'Kangal Köpeği · Sivas\'ın sadık çoban köpeği', hacibayram: 'Hacı Bayram Veli Camii · 15. yüzyıl',
   meclis: 'Türkiye Büyük Millet Meclisi binası', ulus: 'Ulus Meydanı · Zafer Anıtı, 1927', erzkale: 'Erzurum Kalesi · tarihi surlar',
   perre: 'Perre Antik Kenti · kaya mezarları', aspendos: 'Aspendos Tiyatrosu · Roma dönemi', alaaddin: 'Alaaddin Tepesi · Selçuklu eserleri', ulucami: 'Bursa Ulu Cami · 20 kubbeli'
 };
-const CITY_LM = [['peri', 'kale'], ['galata', 'kiz', 'saat', 'dikilitas'], ['cifte', 'kumbet', 'gok', 'divrigi'], ['yesil', 'teleferik', 'tophane', 'ulucami'], ['mevlana', 'ince', 'alaaddin'], ['ankale', 'hacibayram', 'meclis', 'ulus', 'atakule'], ['uckumbet', 'yakutiye', 'erzkale'], ['nemrut', 'cendere', 'perre'], ['yivli', 'hadrian', 'aspendos']];
+const CITY_LM = [['peri', 'kale'], ['galata', 'kiz', 'saat', 'dikilitas'], ['cifte', 'sivasulu', 'buruciye', 'kumbet', 'gok', 'divrigi', 'kangal'], ['yesil', 'teleferik', 'tophane', 'ulucami'], ['mevlana', 'ince', 'alaaddin'], ['ankale', 'hacibayram', 'meclis', 'ulus', 'atakule'], ['uckumbet', 'yakutiye', 'erzkale'], ['nemrut', 'cendere', 'perre'], ['yivli', 'hadrian', 'aspendos']];
 const CITY_NAME = ['Nevşehir', 'İstanbul', 'Sivas', 'Bursa', 'Konya', 'Ankara', 'Erzurum', 'Adıyaman', 'Antalya'], CITY_FROM = ["Nevşehir'den", "İstanbul'dan", "Sivas'tan", "Bursa'dan", "Konya'dan", "Ankara'dan", "Erzurum'dan", "Adıyaman'dan", "Antalya'dan"];
-const LM_NAME = { peri: 'Peri Bacası', kale: 'Kaya Kale', galata: 'Galata Kulesi', kiz: 'Kız Kulesi', saat: 'Dolmabahçe Saat Kulesi', cifte: 'Çifte Minareli Medrese', gok: 'Gök Medrese', kumbet: 'Selçuklu Kümbeti', yesil: 'Yeşil Türbe', tophane: 'Tophane Saat Kulesi', teleferik: 'Uludağ Teleferiği', mevlana: 'Mevlâna Türbesi', ince: 'İnce Minareli Medrese', anit: 'Anıtkabir', atakule: 'Atakule', ankale: 'Ankara Kalesi', uckumbet: 'Üç Kümbetler', yakutiye: 'Yakutiye Medresesi', nemrut: 'Nemrut Dağı', cendere: 'Cendere Köprüsü', yivli: 'Yivli Minare', hadrian: 'Hadrian Kapısı', dikilitas: 'Dikilitaş', divrigi: 'Divriği Ulu Camii', hacibayram: 'Hacı Bayram Veli Camii', meclis: 'TBMM Binası', ulus: 'Ulus Meydanı', erzkale: 'Erzurum Kalesi', perre: 'Perre Antik Kenti', aspendos: 'Aspendos Tiyatrosu', alaaddin: 'Alaaddin Tepesi', ulucami: 'Bursa Ulu Cami' };
+const LM_NAME = { peri: 'Peri Bacası', kale: 'Kaya Kale', galata: 'Galata Kulesi', kiz: 'Kız Kulesi', saat: 'Dolmabahçe Saat Kulesi', cifte: 'Çifte Minareli Medrese', gok: 'Gök Medrese', kumbet: 'Selçuklu Kümbeti', yesil: 'Yeşil Türbe', tophane: 'Tophane Saat Kulesi', teleferik: 'Uludağ Teleferiği', mevlana: 'Mevlâna Türbesi', ince: 'İnce Minareli Medrese', anit: 'Anıtkabir', atakule: 'Atakule', ankale: 'Ankara Kalesi', uckumbet: 'Üç Kümbetler', yakutiye: 'Yakutiye Medresesi', nemrut: 'Nemrut Dağı', cendere: 'Cendere Köprüsü', yivli: 'Yivli Minare', hadrian: 'Hadrian Kapısı', dikilitas: 'Dikilitaş', divrigi: 'Divriği Ulu Camii', sivasulu: 'Sivas Ulu Camii', buruciye: 'Buruciye Medresesi', kangal: 'Kangal Köpeği', hacibayram: 'Hacı Bayram Veli Camii', meclis: 'TBMM Binası', ulus: 'Ulus Meydanı', erzkale: 'Erzurum Kalesi', perre: 'Perre Antik Kenti', aspendos: 'Aspendos Tiyatrosu', alaaddin: 'Alaaddin Tepesi', ulucami: 'Bursa Ulu Cami' };
 const START_COST = [0, 15, 30, 45, 60, 75, 90, 105, 120];
 const CARDS = [
   [['k1', 'Peri Bacaları', 'Volkanik tüfün rüzgâr ve yağmurla aşınmasıyla oluştu.'], ['k2', 'Göreme Açık Hava Müzesi', 'Kayaya oyulmuş kiliseleri var, UNESCO Dünya Mirası.'], ['k3', 'Derinkuyu Yeraltı Şehri', 'Yerin altında kat kat inen dev bir şehir.'], ['k4', 'Uçhisar Kalesi', 'Kayaya oyulmuş, bölgenin en yüksek yerlerinden.'], ['k5', 'Sıcak Hava Balonları', 'Gün doğarken yüzlerce balon birlikte havalanır.'], ['k6', 'Avanos Çömlekçiliği', 'Kızılırmak\'ın kiliyle çömlekler yapılır.']],
@@ -1919,6 +1947,7 @@ function drawSiv2(P, a) {   // Divriği taç kapısı, Eğri Köprü, koyun sür
   river(P, GROUND - 14, 7, '#5a8ab8');
   { const x = wrapX(260, .45, 360), by = GROUND - 12; ctx.fillStyle = tn('#a89078', P, .3, 'near'); for (let dx = -40; dx <= 40; dx++) { const h = Math.round(16 - Math.abs(dx) * .18); ctx.fillRect(x + dx, by - h, 1, 3); }
     ctx.fillRect(x - 30, by - 10, 4, 10); ctx.fillRect(x - 2, by - 14, 4, 14); ctx.fillRect(x + 26, by - 10, 4, 10); }
+  { const x = Math.round(((40 - bg * .55 - time * 4) % (W + 60) + W + 60) % (W + 60) - 30); ctx.save(); ctx.globalAlpha = a; ctx.drawImage(KANGAL, x - 20, GROUND - 19); ctx.restore(); }
   for (let i = 0; i < 7; i++) { const x = Math.round(((i * 23 + 60 - bg * .55 - time * 4) % (W + 60) + W + 60) % (W + 60) - 30), y = GROUND - 6 - (i % 2); ctx.fillStyle = '#f4f0e8'; ctx.fillRect(x, y - 3, 5, 3); ctx.fillStyle = '#2a2420'; ctx.fillRect(x + 5, y - 3, 2, 2); ctx.fillRect(x + 1, y, 1, 1); ctx.fillRect(x + 4, y, 1, 1); }
 }
 function drawBur2(P, a) {   // Cumalıkızık evleri, Irgandı Köprüsü, Uludağ uzakta
@@ -2043,9 +2072,16 @@ function drawSivas(P, a) {
   ctx.globalAlpha = a;
   ridge(.08, .9, 10, GROUND - 24, tn('#8a9ab8', P, .45), tn('#ffffff', P, .25), 30);
   const sil = tn('#8a6a5a', P, .45, 'mid2'), sd = tn('#5a4a4a', P, .45, 'mid2');
-  for (let k = 0; k < 3; k++) {
-    const x = wrapX(60 + k * 130, .3, 390), by = GROUND - 22; if (x < -50 || x > W + 50) continue;
+  for (let k = 0; k < 4; k++) {
+    const x = wrapX(60 + k * 125, .3, 500), by = GROUND - 22; if (x < -50 || x > W + 50) continue;
     ctx.fillStyle = sil;
+    if (k === 2) {   // Sivas Ulu Camii: alçak çok direkli harim + eğri tuğla minare
+      ctx.fillRect(x - 26, by - 12, 52, 12); ctx.fillStyle = sd; for (let i = -22; i < 24; i += 6) ctx.fillRect(x + i, by - 9, 2, 6);
+      ctx.fillStyle = tn('#a8603a', P, .4, 'mid2'); for (let yy = 0; yy < 40; yy++) ctx.fillRect(x + 22 + Math.round(yy * .08), by - 12 - yy, 4, 1); ctx.fillRect(x + 21 + 3, by - 40, 6, 2); ctx.fillRect(x + 26, by - 56, 2, 4);
+      litWin(P, x - 14, by - 8, 2, 3); litWin(P, x + 4, by - 8, 2, 3); continue; }
+    if (k === 3) {   // Buruciye Medresesi: kubbe + taç kapı
+      ctx.fillRect(x - 18, by - 22, 36, 22); dome(x + 8, by - 22, 7); ctx.fillStyle = sd; ctx.fillRect(x - 6, by - 16, 9, 16); for (let r = 0; r < 5; r++) ctx.fillRect(x - 6 + Math.round(r * .4), by - 17 - r, 9 - Math.round(r * .8), 1);
+      ctx.fillStyle = tn('#2ab0c0', P, .4); ctx.fillRect(x - 16, by - 20, 32, 1); continue; }
     if (k === 0) {   // Çifte Minareli portal
       ctx.fillRect(x - 12, by - 26, 24, 26); for (const mx of [x - 11, x + 8]) { ctx.fillRect(mx, by - 56, 4, 30); ctx.fillRect(mx - 1, by - 46, 6, 2); ctx.fillRect(mx + 1, by - 60, 2, 4); }
       ctx.fillStyle = sd; ctx.fillRect(x - 5, by - 18, 10, 18); ctx.fillRect(x - 4, by - 20, 8, 2); ctx.fillStyle = tn('#2ab0c0', P, .4); ctx.fillRect(x - 10, by - 40, 1, 1); ctx.fillRect(x + 9, by - 40, 1, 1); ctx.fillRect(x - 10, by - 50, 2, 1); ctx.fillRect(x + 9, by - 50, 2, 1);
